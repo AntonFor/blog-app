@@ -1,0 +1,45 @@
+.header {
+	height: 80px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 22px;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 18px;
+	line-height: 28px;
+	background-color: #FFFF;
+
+	&__title {
+		flex-grow: 1;
+		margin: 0;
+	}
+
+	&__btn-sign-in {
+		font-style: normal;
+		font-weight: normal;
+		font-size: 18px;
+		line-height: 28px;
+		width: 110px;
+		height: 50px;
+		border: 1px solid #FFFF;
+		box-sizing: border-box;
+		border-radius: 5px;
+		margin-right: 22px;
+		background-color: #FFFF;
+	}
+
+	&__btn-sign-up {
+		font-style: normal;
+		font-weight: normal;
+		font-size: 18px;
+		line-height: 28px;
+		width: 110px;
+		height: 50px;
+		color: #52C41A;
+		border: 1px solid #52C41A;
+		box-sizing: border-box;
+		border-radius: 5px;
+		background-color: #FFFF;
+	}
+}

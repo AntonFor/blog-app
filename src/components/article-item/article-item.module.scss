@@ -1,0 +1,75 @@
+.container {
+	width: 940px;
+	height: 140px;
+	margin: auto;
+	margin-top: 26px;
+	background-color: #FFFF;
+	border-top: 1px solid #FFFF;
+	display: flex;
+}
+
+.content {
+	width: 700px;
+
+	&__title {
+		display: flex;
+		align-items: center;
+		margin: 15px 0 0 20px;
+	}
+
+	&__heading {
+		margin: 0;
+		margin-right: 13px;
+		font-size: 20px;
+		line-height: 28px;
+		color: #1890FF;
+	}
+
+	&__number {
+		margin-left: 5px;
+	}
+
+	&__tag {
+		margin: 10px 0 0 20px;
+		font-size: 12px;
+		line-height: 15px;
+	}
+
+	&__text {
+		margin: 10px 0 0 20px;
+		font-size: 12px;
+		line-height: 22px;
+	}
+
+	&__paragraph {
+		margin: 0;
+	}
+}
+
+.person {
+	display: flex;
+	margin-left: auto;
+
+	&__description {
+		margin: 15px 12px 0 0;
+	}
+
+	&__name {
+		margin: 0;
+		font-size: 18px;
+		line-height: 28px;
+	}
+
+	&__date {
+		font-size: 12px;
+		line-height: 22px;
+		color: rgba(0, 0, 0, 0.5);
+	}
+
+	&__avatar {
+		width: 46px;
+		height: 46px;
+		background-image: url('./rectangle.png');
+		margin: 15px 15px 0 0;
+	}
+}
