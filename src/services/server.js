@@ -7,7 +7,7 @@ class Server {
 	}
 
 	getArticles() {
-		return this.getResource('https://conduit.productionready.io/api/articles');
+		return this.getResource('https://conduit.productionready.io/api/articles/');
 	}
 }
 

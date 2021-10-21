@@ -1,0 +1,47 @@
+.profile-form {
+  max-width: 385px;
+	margin: auto;
+	padding: 48px 32px;
+	background-color: #fff;
+	margin-top: 60px;
+	margin-bottom: 60px;
+
+	&__heading {
+		font-size: 20px;
+		line-height: 28px;
+		color: #262626;
+		text-align: center;
+		margin-bottom: 20px;
+	}
+
+	&__title {
+		font-size: 14px;
+		line-height: 22px;
+		color: #262626;
+		margin: 0;
+	}
+
+	&__input-username {
+		margin-bottom: 12px;
+	}
+
+	&__input-email {
+		margin-bottom: 12px;
+	}
+
+	&__input-password {
+		margin-bottom: 12px;
+	}
+
+	&__input-avatar {
+		margin-bottom: 20px;
+	}
+
+	&__button-container {
+		margin-bottom: 0px;
+	}
+
+	&__button {
+		width: 100%;
+	}
+}

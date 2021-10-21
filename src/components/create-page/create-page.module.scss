@@ -1,0 +1,67 @@
+.create-form {
+  max-width: 385px;
+	margin: auto;
+	padding: 48px 32px;
+	background-color: #fff;
+	margin-top: 60px;
+	margin-bottom: 60px;
+
+	&__heading {
+		font-size: 20px;
+		line-height: 28px;
+		color: #262626;
+		text-align: center;
+		margin-bottom: 20px;
+	}
+
+	&__title {
+		font-size: 14px;
+		line-height: 22px;
+		color: #262626;
+		margin: 0;
+	}
+
+	&__input-username {
+		margin-bottom: 12px;
+	}
+
+	&__input-email {
+		margin-bottom: 12px;
+	}
+
+	&__input-password {
+		margin-bottom: 12px;
+	}
+
+	&__input-repeatpassword {
+		margin-bottom: 20px;
+	}
+
+	&__devider {
+		width: 100%;
+		border-top: 1px solid #E8E8E8;
+		margin-bottom: 8px;
+	}
+
+	&__checked {
+		font-size: 14px;
+		line-height: 22px;
+		color: #595959;
+	}
+
+	&__button-container {
+		margin-bottom: 8px;
+	}
+
+	&__button {
+		width: 100%;
+	}
+
+	&__ref {
+		margin: 0;
+		font-size: 12px;
+		line-height: 20px;
+		text-align: center;
+		color: #8C8C8C;
+	}
+}

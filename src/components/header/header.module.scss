@@ -29,6 +29,10 @@
 		background-color: #FFFF;
 	}
 
+	&__link-sign-in {
+		color: #000;
+	}
+
 	&__btn-sign-up {
 		font-style: normal;
 		font-weight: normal;
@@ -36,10 +40,60 @@
 		line-height: 28px;
 		width: 110px;
 		height: 50px;
-		color: #52C41A;
 		border: 1px solid #52C41A;
 		box-sizing: border-box;
 		border-radius: 5px;
 		background-color: #FFFF;
+	}
+
+	&__link-sign-up {
+		color: #52C41A;
+	}
+
+	&__btn-sign-out {
+		font-style: normal;
+		font-weight: normal;
+		font-size: 18px;
+		line-height: 28px;
+		width: 110px;
+		height: 50px;
+		border: 1px solid #000;
+		box-sizing: border-box;
+		border-radius: 5px;
+		background-color: #FFFF;
+	}
+
+	&__link-sign-out {
+		color: #000;
+	}
+
+	&__avatar {
+		width: 46px;
+		height: 46px;
+		margin-right: 27px;
+	}
+
+	&__username {
+		font-size: 18px;
+		line-height: 28px;
+		margin-right: 13px;
+	}
+
+	&__btn-create-article {
+		font-style: normal;
+		font-weight: normal;
+		font-size: 14px;
+		line-height: 22px;
+		width: 112px;
+		height: 30px;
+		border: 1px solid #52C41A;
+		box-sizing: border-box;
+		border-radius: 5px;
+		background-color: #FFFF;
+		margin-right: 27px;
+	}
+
+	&__link-create-article {
+		color: #52C41A;
 	}
 }
