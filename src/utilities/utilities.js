@@ -51,3 +51,9 @@ export const editProfile = (state, dataAccount) => {
 	const newState = {...state, users: newUsers};
 	return newState;
 }
+
+export const saveProfile = (state) => {
+	const { users } = state;
+	console.log('!');
+	localStorage.setItem('users', JSON.stringify(users));
+}

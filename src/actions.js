@@ -13,10 +13,12 @@ export const articles = () => (dispatch) => server.getArticles()
 		dispatch(errorArticles(err));
 	});
 
-	export const createAccount = (data) => ( {type: 'CREATE_ACCOUNT', data} );
+export const createAccount = (data) => ( {type: 'CREATE_ACCOUNT', data} );
 
-	export const logOut = () => ( {type: 'LOG_OUT'} );
+export const logOut = () => ( {type: 'LOG_OUT'} );
 
-	export const logIn = (data) => ( {type: 'LOG_IN', data} );
+export const logIn = (data) => ( {type: 'LOG_IN', data} );
 
-	export const editProfile = (data) => ( {type: 'EDIT_PROFILE', data} )
+export const editProfile = (data) => ( {type: 'EDIT_PROFILE', data} );
+
+export const saveProfile = () => ( {type: 'SAVE_PROFILE'} );

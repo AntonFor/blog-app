@@ -25,12 +25,13 @@
 		border: 1px solid #FFFF;
 		box-sizing: border-box;
 		border-radius: 5px;
-		margin-right: 22px;
 		background-color: #FFFF;
+		cursor: pointer;
 	}
 
 	&__link-sign-in {
 		color: #000;
+		margin-right: 22px;
 	}
 
 	&__btn-sign-up {
@@ -44,6 +45,7 @@
 		box-sizing: border-box;
 		border-radius: 5px;
 		background-color: #FFFF;
+		cursor: pointer;
 	}
 
 	&__link-sign-up {
@@ -61,6 +63,7 @@
 		box-sizing: border-box;
 		border-radius: 5px;
 		background-color: #FFFF;
+		cursor: pointer;
 	}
 
 	&__link-sign-out {
@@ -71,12 +74,17 @@
 		width: 46px;
 		height: 46px;
 		margin-right: 27px;
+		cursor: pointer;
 	}
 
 	&__username {
 		font-size: 18px;
 		line-height: 28px;
 		margin-right: 13px;
+	}
+
+	&__username-link {
+		color: #000;
 	}
 
 	&__btn-create-article {
@@ -90,10 +98,11 @@
 		box-sizing: border-box;
 		border-radius: 5px;
 		background-color: #FFFF;
-		margin-right: 27px;
+		cursor: pointer;
 	}
 
 	&__link-create-article {
 		color: #52C41A;
+		margin-right: 27px;
 	}
 }

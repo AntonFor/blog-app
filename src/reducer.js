@@ -1,4 +1,4 @@
-import { updateArticles, errorArticles, createAccount, logOut, logIn, editProfile } from './utilities/utilities';
+import { updateArticles, errorArticles, createAccount, logOut, logIn, editProfile, saveProfile } from './utilities/utilities';
 
 const dateState = {
 	loading: true,
@@ -17,6 +17,7 @@ const reducer = (state = dateState, action) => {
 		case 'LOG_OUT': return logOut(state)
 		case 'LOG_IN': return logIn(state, action.data)
 		case 'EDIT_PROFILE': return editProfile(state, action.data)
+		case 'SAVE_PROFILE': return saveProfile(state)
 		default: return state;
 	}
 }

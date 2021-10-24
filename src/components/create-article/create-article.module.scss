@@ -1,0 +1,57 @@
+.create-form {
+  max-width: 940px;
+	margin: auto;
+	padding: 48px 32px;
+	background-color: #fff;
+	margin-top: 60px;
+	margin-bottom: 60px;
+
+	&__heading {
+		font-size: 20px;
+		line-height: 28px;
+		color: #262626;
+		text-align: center;
+		margin-bottom: 20px;
+	}
+
+	&__title {
+		font-size: 14px;
+		line-height: 22px;
+		color: #262626;
+		margin: 0;
+	}
+
+	&__input-title {
+		margin-bottom: 20px;
+	}
+
+	&__description {
+		font-size: 14px;
+		line-height: 22px;
+		color: #262626;
+		margin: 0;
+	}
+
+	&__input-description {
+		margin-bottom: 20px;
+	}
+
+	&__text {
+		font-size: 14px;
+		line-height: 22px;
+		color: #262626;
+		margin: 0;
+	}
+
+	&__input-text {
+		margin-bottom: 20px;
+	}
+
+	&__button-container {
+		margin-top: 20px;
+	}
+
+	&__button {
+		width: 36.5%;
+	}
+}

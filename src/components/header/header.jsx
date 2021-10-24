@@ -26,12 +26,16 @@ const Header = ({ isLogIn, users, logOut, currentUser }) => {
 const HeaderIsNotLogIn = () => (
 	<div className={classes.header}>
 		<p className={classes.header__title}>Realworld Blog</p>
-		<button type="button" className={classes["header__btn-sign-in"]}>
-			<Link to="/sign-in" className={classes["header__link-sign-in"]}>Sign In</Link>
-		</button>
-		<button type="button" className={classes["header__btn-sign-up"]}>
-			<Link to="/sign-up" className={classes["header__link-sign-up"]}>Sign Up</Link>
-		</button>
+		<Link to="/sign-in" className={classes["header__link-sign-in"]}>
+			<button type="button" className={classes["header__btn-sign-in"]}>
+				Sign In
+			</button>
+		</Link>
+		<Link to="/sign-up" className={classes["header__link-sign-up"]}>
+			<button type="button" className={classes["header__btn-sign-up"]}>
+				Sign Up
+			</button>
+		</Link>
 	</div>
 );
 
@@ -44,18 +48,22 @@ const HeaderIsLogIn = ({ user, onClickLogOut }) => {
 	return (
 		<div className={classes.header}>
 			<p className={classes.header__title}>Realworld Blog</p>
-			<button type="button" className={classes["header__btn-create-article"]}>
-				<Link to="/sign-in" className={classes["header__link-create-article"]}>Create article</Link>
-			</button>
+			<Link to="/sign-in" className={classes["header__link-create-article"]}>
+				<button type="button" className={classes["header__btn-create-article"]}>
+					Create article
+				</button>
+			</Link>
 			<span className={classes.header__username}>
-				<Link to="/profile">{username}</Link>
+				<Link to="/profile" className={classes["header__username-link"]}>{username}</Link>
 			</span>
 			<div className={classes.header__avatar} style={imageUser}>
 				<Link to="/profile" />
 			</div>
-			<button type="button" className={classes["header__btn-sign-out"]} onClick={onClickLogOut}>
-				<Link to="/" className={classes["header__link-sign-out"]}>Log Out</Link>
-			</button>
+			<Link to="/" className={classes["header__link-sign-out"]}>
+				<button type="button" className={classes["header__btn-sign-out"]} onClick={onClickLogOut}>
+					Log Out
+				</button>
+			</Link>
 		</div>
 	);
 };
