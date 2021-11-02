@@ -1,5 +1,6 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
@@ -17,15 +18,16 @@ import LoginPage from '../login-page';
 import CreatePage from '../create-page';
 import ProfilePage from '../profile-page';
 import CreateArticle from '../create-article';
+import EditArticle from '../edit-article';
 
-const App = ({ updateArticles, saveProfile }) => {
+const App = ({ updateArticles, saveProfile, article, user }) => {
 	useEffect(() => {
 		updateArticles();
-	}, []);
+	}, [article]);
 
-	useLayoutEffect(() => {
-		saveProfile();
-	}, []);
+	useEffect(() => {
+		console.log(saveProfile);
+	}, [user]);
 
 	return (
 		<BrowserRouter>
@@ -37,6 +39,7 @@ const App = ({ updateArticles, saveProfile }) => {
 				<Route path="/sign-up" component={CreatePage} />
 				<Route path="/profile" component={ProfilePage} />
 				<Route path="/new-article" component={CreateArticle} />
+				<Route path="/edit" component={EditArticle} />
 			</div>
 		</BrowserRouter>
 	)
@@ -44,15 +47,26 @@ const App = ({ updateArticles, saveProfile }) => {
 
 App.defaultProps = {
 	updateArticles: () => {},
-	saveProfile: () => {}
+	saveProfile: () => {},
+	article: {},
+	user: {}
 }
 
 App.propTypes = {
 	updateArticles: PropTypes.func,
-	saveProfile: PropTypes.func
+	saveProfile: PropTypes.func,
+	article: PropTypes.objectOf(PropTypes.object),
+	user: PropTypes.objectOf(PropTypes.string)
 }
 
-const mapStateToProps = () => {}
+const mapStateToProps = (state) => {
+	const { article, user, errorCreateAccount } = state;
+	return ({
+		article,
+		user,
+		errorCreateAccount
+	})
+}
 
 const mapDispatchToProps = (dispatch) => {
 	const { articles, saveProfile } = bindActionCreators(actions, dispatch);

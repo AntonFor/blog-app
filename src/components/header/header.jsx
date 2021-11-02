@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,13 +9,13 @@ import * as actions from '../../actions';
 
 import classes from './header.module.scss';
 
-const Header = ({ isLogIn, users, logOut, currentUser }) => {
+const Header = ({ isLogIn, user, logOut, resetUserEdit }) => {
 	const [header, setHeader] = useState(<HeaderIsNotLogIn />);
 	
 	useEffect(() => {
-		if (isLogIn) setHeader(<HeaderIsLogIn user={users[currentUser]} onClickLogOut={logOut} />)
+		if (isLogIn) setHeader(<HeaderIsLogIn user={user} onClickLogOut={logOut} resetUserEdit={resetUserEdit} />)
 		else setHeader(<HeaderIsNotLogIn />)
-	}, [isLogIn, users, logOut, currentUser]);
+	}, [isLogIn, user, logOut, resetUserEdit]);
 
 	return (
 		<div>
@@ -25,7 +26,9 @@ const Header = ({ isLogIn, users, logOut, currentUser }) => {
 
 const HeaderIsNotLogIn = () => (
 	<div className={classes.header}>
-		<p className={classes.header__title}>Realworld Blog</p>
+		<p className={classes.header__title}>
+			<Link to="/" className={classes["header__link-title"]}>Realworld Blog</Link>
+		</p>
 		<Link to="/sign-in" className={classes["header__link-sign-in"]}>
 			<button type="button" className={classes["header__btn-sign-in"]}>
 				Sign In
@@ -39,16 +42,19 @@ const HeaderIsNotLogIn = () => (
 	</div>
 );
 
-const HeaderIsLogIn = ({ user, onClickLogOut }) => {
-	const { username, avatar } = user;
-	const imageUser = {
-		backgroundImage: `url(${avatar})`
-	}
+const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit }) => {
+	const { username } = user;
+	let { image } = user;
+	if (image === null) image = 'https://realworld-temp-api.herokuapp.com/images/smiley-cyrus.jpeg';
+
+	resetUserEdit();
 
 	return (
 		<div className={classes.header}>
-			<p className={classes.header__title}>Realworld Blog</p>
-			<Link to="/sign-in" className={classes["header__link-create-article"]}>
+			<p className={classes.header__title}>
+				<Link to="/" className={classes["header__link-title"]}>Realworld Blog</Link>
+			</p>
+			<Link to="/new-article" className={classes["header__link-create-article"]}>
 				<button type="button" className={classes["header__btn-create-article"]}>
 					Create article
 				</button>
@@ -56,9 +62,11 @@ const HeaderIsLogIn = ({ user, onClickLogOut }) => {
 			<span className={classes.header__username}>
 				<Link to="/profile" className={classes["header__username-link"]}>{username}</Link>
 			</span>
-			<div className={classes.header__avatar} style={imageUser}>
-				<Link to="/profile" />
-			</div>
+			<Link to="/profile" className={classes["header__avatar-link"]}>
+				<div className={classes.header__avatar}>
+					<img className={classes["header__avatar-img"]} src={image} alt="Avatar"/>
+				</div>
+			</Link>
 			<Link to="/" className={classes["header__link-sign-out"]}>
 				<button type="button" className={classes["header__btn-sign-out"]} onClick={onClickLogOut}>
 					Log Out
@@ -70,44 +78,46 @@ const HeaderIsLogIn = ({ user, onClickLogOut }) => {
 
 Header.defaultProps = {
 	isLogIn: false,
-	users: [],
+	user: {},
 	logOut: () => {},
-	currentUser: 0
+	resetUserEdit: () => {}
 }
 
 Header.propTypes = {
 	isLogIn: PropTypes.bool,
-	users: PropTypes.arrayOf(PropTypes.object),
+	user: PropTypes.objectOf(PropTypes.string),
 	logOut: PropTypes.func,
-	currentUser: PropTypes.number
+	resetUserEdit: PropTypes.func
 }
 
 HeaderIsLogIn.defaultProps = {
 	user: {},
-	onClickLogOut: () => {}
+	onClickLogOut: () => {},
+	resetUserEdit: () => {}
 }
 
 HeaderIsLogIn.propTypes = {
 	user: PropTypes.shape({
 		username: PropTypes.string,
-		avatar: PropTypes.string
+		image: PropTypes.string
 	}),
-	onClickLogOut: PropTypes.func
+	onClickLogOut: PropTypes.func,
+	resetUserEdit: PropTypes.func
 }
 
 const mapStateToProps = (state) => {
-	const { isLogIn, users, currentUser } = state;
+	const { isLogIn, user } = state;
 	return ({
 		isLogIn,
-		users,
-		currentUser
+		user
 	})
 }
 
 const mapDispatchToProps = (dispatch) => {
-	const { logOut } = bindActionCreators(actions, dispatch);
+	const { logOut, resetUserEdit } = bindActionCreators(actions, dispatch);
 	return ({
-		logOut
+		logOut,
+		resetUserEdit
 	})
 }
 

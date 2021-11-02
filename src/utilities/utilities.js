@@ -9,51 +9,50 @@ export const errorArticles = (state) => {
 }
 
 export const createAccount = (state, dataAccount) => {
-	const newUser = {
-		username: dataAccount.username,
-		email: dataAccount.email,
-		password: dataAccount.password,
-		avatar: './rectangle.png'
-	}
-	const { users } = state;
-	const usersNew = [...users, newUser];
-	const newState = {...state, isLogIn: true, users: usersNew};
+	const newState = {...state, errorCreateAccount: false, isLogIn: true, user: dataAccount.user};
+	return newState;
+}
+
+export const errorAccount = (state) => {
+	const newState = {...state, errorCreateAccount: true};
 	return newState;
 }
 
 export const logOut = (state) => {
-	const newState = {...state, isLogIn: false}
+	const newState = {...state, isLogIn: false, user: null, logIn: false}
 	return newState;
 }
 
 export const logIn = (state, dataAccount) => {
-	let newState = {...state};
-	const { users } = newState;
-	users.forEach((user, i) => {
-		if (user.email === dataAccount.email && user.password === dataAccount.password) {
-			newState = {...newState, isLogIn: true, currentUser: i}
-		}
-	});
+	const newState = {...state, errorLogIn: false, isLogIn: true, user: dataAccount.user, logIn: true};
+	return newState;
+}
+
+export const logError = (state) => {
+	const newState = {...state, errorLogIn: true};
 	return newState;
 }
 
 export const editProfile = (state, dataAccount) => {
-	let editUser = {
-		username: dataAccount.username,
-		email: dataAccount.email,
-		password: dataAccount.password,
-		avatar: dataAccount.avatar
-	}
-	if (dataAccount.password === undefined) editUser = {...editUser, password: state.users[state.currentUser].password}
-	if (dataAccount.avatar === undefined) editUser = {...editUser, avatar: state.users[state.currentUser].avatar}
-	const { users } = state;
-	const newUsers = [...users.slice(0, state.currentUser), editUser, ...users.slice(state.currentUser + 1)];
-	const newState = {...state, users: newUsers};
+	const newState = {...state, errorEditAccount: false, user: dataAccount.user, userEdit: true};
+	return newState;
+}
+
+export const errorProfile = (state) => {
+	const newState = {...state, errorEditAccount: true};
+	return newState;
+}
+
+export const createArticle = (state, dataAccount) => {
+	const newState = {...state, article: dataAccount};
+	return newState;
+}
+
+export const resetUserEdit = (state) => {
+	const newState = {...state, userEdit: false};
 	return newState;
 }
 
 export const saveProfile = (state) => {
-	const { users } = state;
-	console.log('!');
-	localStorage.setItem('users', JSON.stringify(users));
+	localStorage.setItem('state', JSON.stringify(state));
 }

@@ -41,9 +41,9 @@ const Tags = () => {
 	useEffect(() => {
 		setElements(() => {
 			const arr = tag.map((item) => (
-				<li key={item.id} id={item.id} className={classes.item}>
+				<li key={item.id} id={item.id} className={classes.tag}>
 					<Form.Item
-						className={classes["item__input-tag"]}
+						className={classes.tag__item}
 						name={`tag-${item.id}`}
 					>
 						<Input id={item.id} placeholder="Tag" onChange={(event) => onChangeLabel(event)} />
@@ -51,7 +51,7 @@ const Tags = () => {
 
 					<button
 						id={item.id}
-						className={classes["item__button-delete"]}
+						className={classes["tag__button-delete"]}
 						type="button"
 						onClick={(event) => onClickDelete(event)}
 					>
@@ -64,15 +64,18 @@ const Tags = () => {
 	}, [tag]);
 
 	return (
-		<div>
-			{elements}
-			<button 
-				className={classes["item__button-add"]}
-				type="button"
-				onClick={onClickAdd}
-			>
-				Add tag
-			</button>
+		<div className={classes.tags}>
+			<p className={classes.tags__title}>Tags</p>
+			<div className={classes.tags__container}>
+				<ul className={classes.tags__list}>{elements}</ul>
+				<button 
+					className={classes["tags__button-add"]}
+					type="button"
+					onClick={onClickAdd}
+				>
+					Add tag
+				</button>
+			</div>
 		</div>
 	);
 }

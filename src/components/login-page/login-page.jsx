@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable import/no-cycle */
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
@@ -6,20 +8,28 @@ import { Link, withRouter } from 'react-router-dom';
 
 import { Form, Input, Button } from 'antd';
 
+import AlertErr from '../alert';
+
 import * as actions from '../../actions';
 
 import classes from './login-page.module.scss';
 
-const LoginPage = ({ onClickLogIn, history }) => {
+const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
+	useEffect(() => {
+		if (!logIn) history.push("/sign-in");
+		else history.push("/");
+	}, [logIn]);
+
 	const onFinish = (values) => {
-		console.log('Success:', values);
+		console.log('Success:', values, history);
 		onClickLogIn(values);
-		history.push("/");
 	};
 	
 	const onFinishFailed = (errorInfo) => {
 		console.log('Failed:', errorInfo);
 	};
+
+	const alertErr = errorLogIn ? <AlertErr description="Email or password is invalid" /> : null;
 	
 	return (
 		<Form
@@ -31,6 +41,7 @@ const LoginPage = ({ onClickLogIn, history }) => {
       onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
     >
+			{alertErr}
 			<h1 className={classes["login-form__heading"]}>Sign In</h1>
 			<p className={classes["login-form__title"]}>Email address</p>
       <Form.Item
@@ -80,7 +91,9 @@ const LoginPage = ({ onClickLogIn, history }) => {
 
 LoginPage.defaultProps = {
 	onClickLogIn: () => {},
-	history: {}
+	history: {},
+	errorLogIn: false,
+	logIn: false
 }
 
 LoginPage.propTypes = {
@@ -90,10 +103,18 @@ LoginPage.propTypes = {
     PropTypes.number,
     PropTypes.object,
 		PropTypes.func
-  ])
+  ]),
+	errorLogIn: PropTypes.bool,
+	logIn: PropTypes.bool
 }
 
-const mapStateToProps = () => {}
+const mapStateToProps = (state) => {
+	const { errorLogIn, logIn } = state;
+	return({
+		errorLogIn,
+		logIn
+	})
+}
 
 const mapDispatchToProps = (dispatch) => {
 	const { logIn } = bindActionCreators(actions, dispatch);

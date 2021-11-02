@@ -7,32 +7,40 @@ import classes from './article-list.module.scss';
 
 import ArticleItem from '../article-item';
 import Pagin from '../pagin';
+import AlertErr from '../alert';
 
-const ArticleList = ({ articles }) => {
+const ArticleList = ({ articles, error }) => {
 	const elements = articles.map((__, i) => (
 		<li key={uuidv4()}><ArticleItem article={articles[i]} /></li>
 	));
+
+	const alertErr = error ? <AlertErr description="List of articles not available" /> : null;
+	const pagin = error ? null : <Pagin />;
 	
 	return (
 		<>
+			{alertErr}
 			<ul className={classes.list}>{elements}</ul>
-			<Pagin />
+			{pagin}
 		</>
 	)
 }
 
 ArticleList.defaultProps = {
-	articles: []
+	articles: [],
+	error: false
 }
 
 ArticleList.propTypes = {
-	articles: PropTypes.arrayOf(PropTypes.object)
+	articles: PropTypes.arrayOf(PropTypes.object),
+	error: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
-	const { articles } = state;
+	const { articles, error } = state;
 	return ({
-		articles
+		articles,
+		error
 	})
 }
 

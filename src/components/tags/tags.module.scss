@@ -1,0 +1,58 @@
+.tags {
+	max-width: 590px;
+
+	&__title {
+		font-size: 14px;
+		line-height: 22px;
+		margin: 0;
+	}
+
+	&__container {
+		display: flex;
+	}
+
+	&__list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	&__button-add {
+		width: 136px;
+		height: 32px;
+		border: 1px solid #1890FF;
+		box-sizing: border-box;
+		border-radius: 4px;
+		margin-bottom: 5px;
+		background-color: #FFF;
+		font-size: 16px;
+		line-height: 24px;
+		color: #1890FF;
+		align-self: end;
+		cursor: pointer;
+	}
+}
+
+.tag {
+	display: flex;
+	margin-bottom: 5px;
+	margin-right: 19px;
+
+	&__item {
+		width: 300px;
+		margin-bottom: 0;
+		margin-right: 19px;
+	}
+
+	&__button-delete {
+		width: 120px;
+		border: 1px solid #F5222D;
+		box-sizing: border-box;
+		border-radius: 4px;
+		background-color: #FFF;
+		font-size: 16px;
+		line-height: 24px;
+		color: #F5222D;
+		cursor: pointer;
+	}
+}

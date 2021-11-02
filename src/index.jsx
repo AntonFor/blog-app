@@ -15,6 +15,8 @@ const composeEnhancers =
 
 const store = createStore(reducer, composeEnhancers(applyMiddleware(reduxThunk)));
 
+export default store;
+
 ReactDOM.render(
 	<Provider store={store}>
 		<App />

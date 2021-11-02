@@ -15,6 +15,10 @@
 		margin: 0;
 	}
 
+	&__link-title {
+		color: #000;
+	}
+
 	&__btn-sign-in {
 		font-style: normal;
 		font-weight: normal;
@@ -70,11 +74,20 @@
 		color: #000;
 	}
 
+	&__avatar-link {
+		margin-right: 27px;
+	}
+
 	&__avatar {
 		width: 46px;
 		height: 46px;
-		margin-right: 27px;
-		cursor: pointer;
+	}
+
+	&__avatar-img {
+		width: 100%;
+		object-fit: contain;
+		font-size: 9px;
+		color: #000;
 	}
 
 	&__username {

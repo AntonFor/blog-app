@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable import/no-cycle */
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
@@ -6,21 +8,29 @@ import { withRouter } from 'react-router-dom';
 
 import { Form, Input, Button } from 'antd';
 
+import AlertErr from '../alert';
+
 import * as actions from '../../actions';
 
 import classes from './profile-page.module.scss';
 
-const ProfilePage = ({ onClickEdit, history }) => {
+const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit }) => {
+	useEffect(() => {
+		if (!userEdit) history.push("/profile");
+		else history.push("/");
+	}, [userEdit]);
+
 	const onFinish = (values) => {
-		console.log('Success:', values);
+		console.log('Success:', values, history);
 		onClickEdit(values);
-		history.push("/");
 	};
 	
 	const onFinishFailed = (errorInfo) => {
 		console.log('Failed:', errorInfo);
 	};
-	
+
+	const alertErr = errorEditAccount ? <AlertErr description="Username or email already taken" /> : null;
+
 	return (
 		<Form
       name="normal_profile"
@@ -31,6 +41,7 @@ const ProfilePage = ({ onClickEdit, history }) => {
       onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
     >
+			{alertErr}
 			<h1 className={classes["profile-form__heading"]}>Edit Profile</h1>
 			<p className={classes["profile-form__title"]}>Username</p>
       <Form.Item
@@ -124,7 +135,9 @@ const ProfilePage = ({ onClickEdit, history }) => {
 
 ProfilePage.defaultProps = {
 	onClickEdit: () => {},
-	history: {}
+	history: {},
+	errorEditAccount: false,
+	userEdit: false
 }
 
 ProfilePage.propTypes = {
@@ -134,10 +147,18 @@ ProfilePage.propTypes = {
     PropTypes.number,
     PropTypes.object,
 		PropTypes.func
-  ])
+  ]),
+	errorEditAccount: PropTypes.bool,
+	userEdit: PropTypes.bool
 }
 
-const mapStateToProps = () => {}
+const mapStateToProps = (state) => {
+	const { errorEditAccount, userEdit } = state;
+	return({
+		errorEditAccount,
+		userEdit
+	})
+}
 
 const mapDispatchToProps = (dispatch) => {
 	const { editProfile } = bindActionCreators(actions, dispatch);
