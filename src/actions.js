@@ -7,7 +7,7 @@ const responseArticles = (body) => ( {type: 'UPDATE_ARTICLES', body} );
 
 const errorArticles = (error) => ( {type: 'ERROR_ARTICLES', error} );
 
-export const articles = () => (dispatch) => server.getArticles()
+export const articles = () => (dispatch) => server.getArticles(store)
 	.then((response) => {
 		dispatch(responseArticles(response));
 	})	
@@ -15,13 +15,13 @@ export const articles = () => (dispatch) => server.getArticles()
 		dispatch(errorArticles(err));
 	});
 
-const responseCreateAccount = (body) => ( {type: 'CREATE_ACCOUNT', body} );
+const responseCreateAccount = (body, data) => ( {type: 'CREATE_ACCOUNT', body, data} );
 
 const errorCreateAccount = (error) => ( {type: 'ERROR_ACCOUNT', error} );
 
 export const createAccount = (data) => (dispatch) => server.setNewAccount(data)
 	.then((response) => {
-		dispatch(responseCreateAccount(response));
+		dispatch(responseCreateAccount(response, data));
 	})
 	.catch((err) => {
 		dispatch(errorCreateAccount(err));
@@ -29,25 +29,25 @@ export const createAccount = (data) => (dispatch) => server.setNewAccount(data)
 
 export const logOut = () => ( {type: 'LOG_OUT'} );
 
-const responseLogIn = (body) => ( {type: 'LOG_IN', body} );
+const responseLogIn = (body, data) => ( {type: 'LOG_IN', body, data} );
 
 const errorLogIn = (error) => ( {type: 'LOG_ERROR', error} );
 
 export const logIn = (data) => (dispatch) => server.logIn(data)
 	.then((response) => {
-		dispatch(responseLogIn(response));
+		dispatch(responseLogIn(response, data));
 	})
 	.catch((err) => {
 		dispatch(errorLogIn(err));
 	});
 
-const responseEditProfile = (body) => ( {type: 'EDIT_PROFILE', body} );
+const responseEditProfile = (body, data) => ( {type: 'EDIT_PROFILE', body, data} );
 
 const errorEditProfile = (error) => ( {type: 'ERROR_PROFILE', error} );
 
 export const editProfile = (data) => (dispatch) => server.updateProfile(data, store)
 .then((response) => {
-	dispatch(responseEditProfile(response));
+	dispatch(responseEditProfile(response, data));
 })
 .catch((err) => {
 	dispatch(errorEditProfile(err));
@@ -67,4 +67,4 @@ export const createArticle = (data) => (dispatch) => server.setNewArticle(data, 
 
 export const resetUserEdit = () => ( {type: 'RESET_USER_EDIT'} );
 
-// export const saveProfile = () => ( {type: 'SAVE_PROFILE'} );
+export const changePage = (page) => ( {type: 'CHANGE_PAGE', page} );

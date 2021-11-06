@@ -6,8 +6,16 @@ class Server {
 		return await response.json();
 	}
 
-	getArticles() {
-		return this.getResource('https://api.realworld.io/api/articles?limit=20&offset=0');
+	getArticles(store) {
+		const state = store.getState();
+		const { user, currentPage } = state;
+		let token;
+		const ofset = (currentPage - 1) * 10;
+		if (user === null) token = '';
+		else token = user.token;
+		return this.getResource(`https://api.realworld.io/api/articles?limit=10&offset=${ofset}`, {
+			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}
+		});
 	}
 
 	setNewAccount(value) {

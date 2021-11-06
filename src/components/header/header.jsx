@@ -45,7 +45,7 @@ const HeaderIsNotLogIn = () => (
 const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit }) => {
 	const { username } = user;
 	let { image } = user;
-	if (image === null) image = 'https://realworld-temp-api.herokuapp.com/images/smiley-cyrus.jpeg';
+	if (image === null) image = 'https://api.realworld.io/images/smiley-cyrus.jpeg';
 
 	resetUserEdit();
 

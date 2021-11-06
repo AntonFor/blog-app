@@ -1,5 +1,5 @@
 export const updateArticles = (state, bodyArticles) => {
-	const newState = {...state, loading: false, error: false, articles: bodyArticles.articles};
+	const newState = {...state, loading: false, error: false, articles: bodyArticles.articles, articlesCount: bodyArticles.articlesCount};
 	return newState;
 }
 
@@ -8,8 +8,14 @@ export const errorArticles = (state) => {
 	return newState;
 }
 
-export const createAccount = (state, dataAccount) => {
+export const createAccount = (state, dataAccount, dataUser) => {
 	const newState = {...state, errorCreateAccount: false, isLogIn: true, user: dataAccount.user};
+	const body = {
+		"email": dataUser.email,
+		"password": dataUser.password
+	};
+	localStorage.setItem('user', JSON.stringify(body));
+	localStorage.setItem('isLogIn', JSON.stringify(true));
 	return newState;
 }
 
@@ -19,12 +25,15 @@ export const errorAccount = (state) => {
 }
 
 export const logOut = (state) => {
-	const newState = {...state, isLogIn: false, user: null, logIn: false}
+	const newState = {...state, isLogIn: false, user: null, logIn: false};
+	localStorage.setItem('isLogIn', JSON.stringify(false));
 	return newState;
 }
 
-export const logIn = (state, dataAccount) => {
+export const logIn = (state, dataAccount, dataUser) => {
 	const newState = {...state, errorLogIn: false, isLogIn: true, user: dataAccount.user, logIn: true};
+	localStorage.setItem('user', JSON.stringify(dataUser));
+	localStorage.setItem('isLogIn', JSON.stringify(true));
 	return newState;
 }
 
@@ -33,8 +42,18 @@ export const logError = (state) => {
 	return newState;
 }
 
-export const editProfile = (state, dataAccount) => {
+export const editProfile = (state, dataAccount, dataUser) => {
 	const newState = {...state, errorEditAccount: false, user: dataAccount.user, userEdit: true};
+	let body = {
+		"email": dataUser.email
+	};
+	if (dataUser.password !== undefined) body = {...body, "password": dataUser.password}
+	else {
+		const user = localStorage.getItem('user');
+		const getUser = JSON.parse(user);
+		body = {...body, "password": getUser.password};
+	}
+	localStorage.setItem('user', JSON.stringify(body));
 	return newState;
 }
 
@@ -53,6 +72,7 @@ export const resetUserEdit = (state) => {
 	return newState;
 }
 
-export const saveProfile = (state) => {
-	localStorage.setItem('state', JSON.stringify(state));
+export const changePage = (state, page) => {
+	const newState = {...state, currentPage: page};
+	return newState;
 }

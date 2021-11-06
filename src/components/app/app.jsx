@@ -19,27 +19,38 @@ import CreatePage from '../create-page';
 import ProfilePage from '../profile-page';
 import CreateArticle from '../create-article';
 import EditArticle from '../edit-article';
+import Spiner from '../spiner';
 
-const App = ({ updateArticles, saveProfile, article, user }) => {
+const App = ({ updateArticles, article, logIn, user, currentPage, loading }) => {
 	useEffect(() => {
 		updateArticles();
-	}, [article]);
+	}, [article, user, currentPage]);
 
 	useEffect(() => {
-		console.log(saveProfile);
-	}, [user]);
+		const isLogIn = localStorage.getItem('isLogIn');
+		const getIsLogIn = JSON.parse(isLogIn);
+		if (getIsLogIn) {
+			const getUser = localStorage.getItem('user');
+			const getUserPars = JSON.parse(getUser);
+			logIn(getUserPars);
+		}
+	}, []);
+
+	const spiner = loading ? <Spiner /> : null;
 
 	return (
 		<BrowserRouter>
 			<div className={classes.app}>
 				<Header />
+				{spiner}
 				<Route path="/" exact component={ArticleList} />
-				<Route path="/1" component={ArticleMarkdown} />
+				<Route path="/articles" exact component={ArticleList} />
+				<Route path="/articles/:slug" exact component={ArticleMarkdown} />
 				<Route path="/sign-in" component={LoginPage} />
 				<Route path="/sign-up" component={CreatePage} />
 				<Route path="/profile" component={ProfilePage} />
 				<Route path="/new-article" component={CreateArticle} />
-				<Route path="/edit" component={EditArticle} />
+				<Route path="/articles/:slug/edit"component={EditArticle} />
 			</div>
 		</BrowserRouter>
 	)
@@ -47,32 +58,38 @@ const App = ({ updateArticles, saveProfile, article, user }) => {
 
 App.defaultProps = {
 	updateArticles: () => {},
-	saveProfile: () => {},
 	article: {},
-	user: {}
+	logIn: () => {},
+	user: {},
+	currentPage: 0,
+	loading: false
 }
 
 App.propTypes = {
 	updateArticles: PropTypes.func,
-	saveProfile: PropTypes.func,
 	article: PropTypes.objectOf(PropTypes.object),
-	user: PropTypes.objectOf(PropTypes.string)
+	logIn: PropTypes.func,
+	user: PropTypes.objectOf(PropTypes.string),
+	currentPage: PropTypes.number,
+	loading: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
-	const { article, user, errorCreateAccount } = state;
+	const { article, errorCreateAccount, user, currentPage, loading } = state;
 	return ({
 		article,
+		errorCreateAccount,
 		user,
-		errorCreateAccount
+		currentPage,
+		loading
 	})
 }
 
 const mapDispatchToProps = (dispatch) => {
-	const { articles, saveProfile } = bindActionCreators(actions, dispatch);
+	const { articles, logIn } = bindActionCreators(actions, dispatch);
 	return ({
 		updateArticles: articles,
-		saveProfile
+		logIn
 	})
 }
 

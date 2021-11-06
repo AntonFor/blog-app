@@ -23,16 +23,29 @@
 		font-size: 20px;
 		line-height: 28px;
 		color: #1890FF;
+		cursor: pointer;
 	}
 
 	&__number {
 		margin-left: 5px;
 	}
 
-	&__tag {
+	&__tag-item {
+		border: 1px solid #000;
+		border-radius: 2px;
+		display: inline;
+		padding: 3px;
+		margin-right: 8px;
+	}
+
+	&__tags-list {
 		margin: 10px 0 0 20px;
+		padding: 0;
 		font-size: 12px;
 		line-height: 15px;
+		list-style-type: none;
+		display: flex;
+		flex-wrap: wrap;
 	}
 
 	&__text {
@@ -58,17 +71,25 @@
 		margin: 0;
 		font-size: 18px;
 		line-height: 28px;
+		text-align: right;
 	}
 
 	&__date {
 		font-size: 12px;
 		line-height: 22px;
 		color: rgba(0, 0, 0, 0.5);
+		display: inline-block;
+		text-align: right;
 	}
 
 	&__avatar {
 		width: 46px;
 		height: 46px;
 		margin: 15px 15px 0 0;
+	}
+
+	&__avatar-img {
+		object-fit: cover;
+		width: 100%;
 	}
 }
