@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 export const updateArticles = (state, bodyArticles) => {
 	const newState = {...state, loading: false, error: false, articles: bodyArticles.articles, articlesCount: bodyArticles.articlesCount};
 	return newState;
@@ -14,8 +15,8 @@ export const createAccount = (state, dataAccount, dataUser) => {
 		"email": dataUser.email,
 		"password": dataUser.password
 	};
-	localStorage.setItem('user', JSON.stringify(body));
-	localStorage.setItem('isLogIn', JSON.stringify(true));
+	sessionStorage.setItem('user', JSON.stringify(body));
+	sessionStorage.setItem('isLogIn', JSON.stringify(true));
 	return newState;
 }
 
@@ -26,14 +27,14 @@ export const errorAccount = (state) => {
 
 export const logOut = (state) => {
 	const newState = {...state, isLogIn: false, user: null, logIn: false};
-	localStorage.setItem('isLogIn', JSON.stringify(false));
+	sessionStorage.setItem('isLogIn', JSON.stringify(false));
 	return newState;
 }
 
 export const logIn = (state, dataAccount, dataUser) => {
 	const newState = {...state, errorLogIn: false, isLogIn: true, user: dataAccount.user, logIn: true};
-	localStorage.setItem('user', JSON.stringify(dataUser));
-	localStorage.setItem('isLogIn', JSON.stringify(true));
+	sessionStorage.setItem('user', JSON.stringify(dataUser));
+	sessionStorage.setItem('isLogIn', JSON.stringify(true));
 	return newState;
 }
 
@@ -49,11 +50,11 @@ export const editProfile = (state, dataAccount, dataUser) => {
 	};
 	if (dataUser.password !== undefined) body = {...body, "password": dataUser.password}
 	else {
-		const user = localStorage.getItem('user');
+		const user = sessionStorage.getItem('user');
 		const getUser = JSON.parse(user);
 		body = {...body, "password": getUser.password};
 	}
-	localStorage.setItem('user', JSON.stringify(body));
+	sessionStorage.setItem('user', JSON.stringify(body));
 	return newState;
 }
 
@@ -63,7 +64,7 @@ export const errorProfile = (state) => {
 }
 
 export const createArticle = (state, dataAccount) => {
-	const newState = {...state, article: dataAccount};
+	const newState = {...state, article: dataAccount.article};
 	return newState;
 }
 
@@ -74,5 +75,28 @@ export const resetUserEdit = (state) => {
 
 export const changePage = (state, page) => {
 	const newState = {...state, currentPage: page};
+	return newState;
+}
+
+export const editArticle = (state, dataArticle) => {
+	const newState = {...state, article: dataArticle.article};
+	return newState;
+}
+
+export const deleteArticle = (state) => {
+	const newState = {...state, article: {}};
+	return newState;
+}
+
+export const errorDeleteArticle = (state, error) => {
+	if (error == 'Error: 204') {
+		const newState = {...state, article: {}};
+		return newState;
+	}
+	return state;
+}
+
+export const unfavorited = (state, dataArticle) => {
+	const newState = {...state, article: dataArticle.article};
 	return newState;
 }

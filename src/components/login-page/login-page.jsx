@@ -21,13 +21,10 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
 	}, [logIn]);
 
 	const onFinish = (values) => {
-		console.log('Success:', values, history);
 		onClickLogIn(values);
 	};
 	
-	const onFinishFailed = (errorInfo) => {
-		console.log('Failed:', errorInfo);
-	};
+	const onFinishFailed = () => {};
 
 	const alertErr = errorLogIn ? <AlertErr description="Email or password is invalid" /> : null;
 	

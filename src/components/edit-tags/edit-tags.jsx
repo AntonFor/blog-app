@@ -1,13 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import { PropTypes } from 'prop-types';
 
 import { Form, Input } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
 
-import classes from './tags.module.scss';
+import classes from './edit-tags.module.scss';
 
-const Tags = () => {
-	const [tag, setTag] = useState([{id: uuidv4(), text: ''}]);
+const EditTags = ({ tags }) => {
+	const tagDefault = tags.map(item => ({id: uuidv4(), text: item}));
+	const [tag, setTag] = useState(tagDefault);
 	const [elements, setElements] = useState([]);
 
 	const onClickAdd = () => {
@@ -40,11 +42,12 @@ const Tags = () => {
 
 	useEffect(() => {
 		setElements(() => {
-			const arr = tag.map(item => (
+			const arr = tag.map((item, i) => (
 				<li key={item.id} id={item.id} className={classes.tag}>
 					<Form.Item
 						className={classes.tag__item}
 						name={`tag-${item.id}`}
+						initialValue={`${tag[i].text}`}
 					>
 						<Input id={item.id} placeholder="Tag" onChange={(event) => onChangeLabel(event)} />
 					</Form.Item>
@@ -80,4 +83,12 @@ const Tags = () => {
 	);
 }
 
-export default Tags;
+EditTags.defaultProps = {
+	tags: []
+}
+
+EditTags.propTypes = {
+	tags: PropTypes.arrayOf(PropTypes.string)
+}
+
+export default EditTags;

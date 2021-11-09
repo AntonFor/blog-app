@@ -27,10 +27,10 @@ const App = ({ updateArticles, article, logIn, user, currentPage, loading }) => 
 	}, [article, user, currentPage]);
 
 	useEffect(() => {
-		const isLogIn = localStorage.getItem('isLogIn');
+		const isLogIn = sessionStorage.getItem('isLogIn');
 		const getIsLogIn = JSON.parse(isLogIn);
 		if (getIsLogIn) {
-			const getUser = localStorage.getItem('user');
+			const getUser = sessionStorage.getItem('user');
 			const getUserPars = JSON.parse(getUser);
 			logIn(getUserPars);
 		}
@@ -67,7 +67,14 @@ App.defaultProps = {
 
 App.propTypes = {
 	updateArticles: PropTypes.func,
-	article: PropTypes.objectOf(PropTypes.object),
+	article: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+		PropTypes.arrayOf(PropTypes.string),
+		PropTypes.arrayOf(PropTypes.string),
+		PropTypes.bool
+  ]),
 	logIn: PropTypes.func,
 	user: PropTypes.objectOf(PropTypes.string),
 	currentPage: PropTypes.number,

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
@@ -44,6 +45,6 @@ const mapStateToProps = (state) => {
 	})
 }
 
-const mapDispatchToProps = () => {}
+const mapDispatchToProps = () => ({})
 
 export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);

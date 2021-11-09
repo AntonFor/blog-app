@@ -1,17 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable import/no-cycle */
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import { HeartOutlined } from '@ant-design/icons';
+import { Modal } from 'antd';
+import { HeartOutlined, HeartTwoTone, ExclamationCircleOutlined } from '@ant-design/icons';
 
 import { format } from 'date-fns';
 
+import * as actions from '../../actions';
+
 import classes from './article-markdown.module.scss';
 
-const ArticleMarkdown = ({ match, articles, user, history }) => {
+const { confirm } = Modal;
+
+const ArticleMarkdown = ({ match, articles, user, history, deleteArticle, favorites, article }) => {
+	const [ heartIcon, setHeartIcon ] = useState();
+	
 	const { params } = match;
 	const { slug } = params;
 	let idx = articles.findIndex((el) => el.slug === slug);
@@ -21,7 +31,15 @@ const ArticleMarkdown = ({ match, articles, user, history }) => {
 		<li key={i} className={classes["content__tag-item"]}>{item}</li>
 	));
 
-	const buttonGroup = (user.username === articles[idx].author.username) ? <ButtonGroup slug={slug} history={history} /> : null;
+	useEffect(() => {
+		let favorited;
+		if (article === null) favorited = articles[idx].favorited;
+		else favorited = article.favorited;
+		if (favorited === true) setHeartIcon(<HeartTwoTone twoToneColor="red" onClick={() => favorites(articles[idx].favorited, slug)} />);
+		else setHeartIcon(<HeartOutlined onClick={() => favorites(articles[idx].favorited, slug)} />);
+	}, [article]);
+
+	const buttonGroup = (user.username === articles[idx].author.username) ? <ButtonGroup slug={slug} history={history} deleteArticle={deleteArticle} /> : null;
 
 	return(
 		<div className={classes.container}>
@@ -29,7 +47,7 @@ const ArticleMarkdown = ({ match, articles, user, history }) => {
 				<div className={classes.content}>
 					<div className={classes.content__title}>
 						<h2 className={classes.content__heading}>{articles[idx].title}</h2>
-						<HeartOutlined />
+						{heartIcon}
 						<span className={classes.content__number}>{articles[idx].favoritesCount}</span>
 					</div>
 					<div className={classes.content__tag}>
@@ -61,7 +79,10 @@ ArticleMarkdown.defaultProps = {
 	articles: [],
 	match: {},
 	user: {},
-	history: {}
+	history: {},
+	deleteArticle: () => {},
+	favorites: () => {},
+	article: {}
 }
 
 ArticleMarkdown.propTypes = {
@@ -77,28 +98,62 @@ ArticleMarkdown.propTypes = {
     PropTypes.number,
     PropTypes.object,
 		PropTypes.func
+  ]),
+	deleteArticle: PropTypes.func,
+	favorites: PropTypes.func,
+	article: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+		PropTypes.arrayOf(PropTypes.string),
+		PropTypes.arrayOf(PropTypes.string),
+		PropTypes.bool
   ])
 }
 
 const mapStateToProps = (state) => {
-	const { articles, user } = state;
+	const { articles, user, article } = state;
 	return ({
 		articles,
-		user
+		user,
+		article
 	})
 }
 
-const mapDispatchToProps = () => {}
+const mapDispatchToProps = (dispatch) => {
+	const { deleteArticle, favorites } = bindActionCreators(actions, dispatch);
+	return ({
+		deleteArticle,
+		favorites
+	})
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ArticleMarkdown));
 
-const ButtonGroup = ({ slug, history }) => {
+const ButtonGroup = ({ slug, history, deleteArticle }) => {
 	const onClickEditButton = () => {
 		history.push(`/articles/${slug}/edit`);
 	}
+
+	const showDeleteConfirm = () => {
+		confirm({
+			title: 'Are you sure to delete this article?',
+			icon: <ExclamationCircleOutlined />,
+			content: '',
+			okText: 'Yes',
+			okType: 'danger',
+			cancelText: 'No',
+			onOk() {
+				deleteArticle(slug);
+				history.push(`/articles`);
+			},
+			onCancel() {},
+		});
+	}
+
 	return (
 		<div className={classes.buttons}>
-			<button className={classes["button-del"]} type="button">Delete</button>
+			<button className={classes["button-del"]} onClick={showDeleteConfirm} type="button">Delete</button>
 			<button className={classes["button-edit"]} type="button" onClick={() => onClickEditButton(slug)}>Edit</button>
 		</div>
 	)
@@ -106,7 +161,8 @@ const ButtonGroup = ({ slug, history }) => {
 
 ButtonGroup.defaultProps = {
 	slug: '',
-	history: {}
+	history: {},
+	deleteArticle: () => {}
 }
 
 ButtonGroup.propTypes = {
@@ -116,5 +172,6 @@ ButtonGroup.propTypes = {
     PropTypes.number,
     PropTypes.object,
 		PropTypes.func
-  ])
+  ]),
+	deleteArticle: PropTypes.func
 }

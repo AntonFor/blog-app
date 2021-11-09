@@ -21,13 +21,10 @@ const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit }) => {
 	}, [userEdit]);
 
 	const onFinish = (values) => {
-		console.log('Success:', values, history);
 		onClickEdit(values);
 	};
 	
-	const onFinishFailed = (errorInfo) => {
-		console.log('Failed:', errorInfo);
-	};
+	const onFinishFailed = () => {};
 
 	const alertErr = errorEditAccount ? <AlertErr description="Username or email already taken" /> : null;
 

@@ -1,8 +1,9 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-return-await */
 class Server {
 	async getResource(url, obj = null) {
 		const response = await fetch(url, obj);
-		if (!response.ok) throw new Error(response);
+		if (response.status !== 200) throw new Error(response.status);
 		return await response.json();
 	}
 
@@ -85,6 +86,53 @@ class Server {
 			method: 'POST',
 			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`},
 			body: JSON.stringify(requestBody)
+		});
+	}
+
+	editArticle(value, slug, store) {
+		const state = store.getState();
+		const arrKeys = Object.keys(value);
+		const tags = [];
+		arrKeys.forEach((item) => {
+			const str = item.slice("-", 3);
+			if (str === 'tag') tags.push(value[item]);
+		});
+		const requestBody = {
+			"article": {
+				"title": value.title,
+				"description": value.description,
+				"body": value.text,
+				"tagList": tags
+			}
+		};
+		return this.getResource(`https://api.realworld.io/api/articles/${slug}`, {
+			method: 'PUT',
+			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`},
+			body: JSON.stringify(requestBody)
+		});
+	}
+
+	deleteArticle(slug, store) {
+		const state = store.getState();
+		return this.getResource(`https://api.realworld.io/api/articles/${slug}`, {
+			method: 'DELETE',
+			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`}
+		});
+	}
+
+	unfavorited(slug, store) {
+		const state = store.getState();
+		return this.getResource(`https://api.realworld.io/api/articles/${slug}/favorite`, {
+			method: 'DELETE',
+			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`}
+		});
+	}
+
+	favorited(slug, store) {
+		const state = store.getState();
+		return this.getResource(`https://api.realworld.io/api/articles/${slug}/favorite`, {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`}
 		});
 	}
 }

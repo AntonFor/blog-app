@@ -22,13 +22,10 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 	}, [user]);
 	
 	const onFinish = (values) => {
-		console.log('Success:', values);
 		onClickCreate(values);
 	};
 	
-	const onFinishFailed = (errorInfo) => {
-		console.log('Failed:', errorInfo);
-	};
+	const onFinishFailed = () => {};
 
 	const alertErr = errorCreateAccount ? <AlertErr description="Username or email already taken" /> : null;
 

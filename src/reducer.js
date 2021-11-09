@@ -1,5 +1,6 @@
 import { updateArticles, errorArticles, createAccount, logOut, logIn, editProfile, createArticle, 
-	errorAccount, errorProfile, resetUserEdit, logError, changePage } from './utilities/utilities';
+	errorAccount, errorProfile, resetUserEdit, logError, changePage, editArticle, deleteArticle,
+	errorDeleteArticle, unfavorited } from './utilities/utilities';
 
 const dateState = {
 	loading: true,
@@ -31,6 +32,10 @@ const reducer = (state = dateState, action) => {
 		case 'CREATE_ARTICLE': return createArticle(state, action.body)
 		case 'RESET_USER_EDIT': return resetUserEdit(state)
 		case 'CHANGE_PAGE': return changePage(state, action.page)
+		case 'EDIT_ARTICLE': return editArticle(state, action.body)
+		case 'DELETE_ARTICLE': return deleteArticle(state)
+		case 'ERROR_DELETE_ARTICLE': return errorDeleteArticle(state, action.error)
+		case 'UNFAVORITED': return unfavorited(state, action.body)
 		default: return state;
 	}
 }

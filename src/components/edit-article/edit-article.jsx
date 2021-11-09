@@ -1,22 +1,30 @@
+/* eslint-disable react/jsx-no-duplicate-props */
+/* eslint-disable import/no-cycle */
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { PropTypes } from 'prop-types';
 
 import { Form, Input, Button } from 'antd';
 
-import Tags from '../tags';
+import * as actions from '../../actions';
+
+import EditTags from '../edit-tags';
 
 import classes from './edit-article.module.scss';
 
-const EditArticle = ({ history }) => {
+const EditArticle = ({ history, match, articles, editArticle }) => {
+	const { params } = match;
+	const { slug } = params;
+	const idx = articles.findIndex((el) => el.slug === slug);
+	
 	const onFinish = (values) => {
-		console.log('Success:', values);
-		history.push("/");
+		editArticle(values, slug);
+		history.push(`/articles/${slug}`);
 	};
 	
-	const onFinishFailed = (errorInfo) => {
-		console.log('Failed:', errorInfo);
-	};
+	const onFinishFailed = () => {};
 	
 	return (
 		<Form
@@ -27,6 +35,11 @@ const EditArticle = ({ history }) => {
       }}
       onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
+			initialValues={{
+        title: articles[idx].title,
+				description: articles[idx].description,
+				text: articles[idx].body
+      }}
     >
 			<h1 className={classes["edit-form__heading"]}>Edit article</h1>
 			<p className={classes["edit-form__title"]}>Title</p>
@@ -73,7 +86,7 @@ const EditArticle = ({ history }) => {
         <Input.TextArea placeholder="Text" autoSize={{ minRows: 7, maxRows: 7 }} />
       </Form.Item>
 
-			<div><Tags /></div>
+			<div><EditTags tags={articles[idx].tagList} /></div>
 
       <Form.Item className={classes["edit-form__button-container"]}>
         <Button 
@@ -89,7 +102,10 @@ const EditArticle = ({ history }) => {
 }
 
 EditArticle.defaultProps = {
-	history: {}
+	history: {},
+	match: {},
+	articles: [],
+	editArticle: () => {}
 }
 
 EditArticle.propTypes = {
@@ -98,7 +114,29 @@ EditArticle.propTypes = {
     PropTypes.number,
     PropTypes.object,
 		PropTypes.func
-  ])
+  ]),
+	match: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object,
+		PropTypes.string
+  ]),
+	articles: PropTypes.arrayOf(PropTypes.object),
+	editArticle: PropTypes.func
 }
 
-export default withRouter(EditArticle);
+const mapStateToProps = (state) => {
+	const { articles } = state;
+	return ({
+		articles
+	})
+}
+
+const mapDispatchToProps = (dispatch) => {
+	const { editArticle } = bindActionCreators(actions, dispatch);
+	return ({
+		editArticle
+	})
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditArticle));

@@ -68,3 +68,51 @@ export const createArticle = (data) => (dispatch) => server.setNewArticle(data, 
 export const resetUserEdit = () => ( {type: 'RESET_USER_EDIT'} );
 
 export const changePage = (page) => ( {type: 'CHANGE_PAGE', page} );
+
+const responseEditArticle = (body) => ( {type: 'EDIT_ARTICLE', body} );
+
+const errorEditArticle = (error) => ( {type: 'ERROR_EDIT_ARTICLE', error} );
+
+export const editArticle = (data, slug) => (dispatch) => server.editArticle(data, slug, store)
+.then((response) => {
+	dispatch(responseEditArticle(response));
+})
+.catch((err) => {
+	dispatch(errorEditArticle(err));
+});
+
+const responseDeleteArticle = () => ( {type: 'DELETE_ARTICLE'} );
+
+const errorDeleteArticle = (error) => ( {type: 'ERROR_DELETE_ARTICLE', error} );
+
+export const deleteArticle = (slug) => (dispatch) => server.deleteArticle(slug, store)
+.then(() => {
+	dispatch(responseDeleteArticle());
+})
+.catch((err) => {
+	dispatch(errorDeleteArticle(err));
+});
+
+const responseUnfavorited = (body) => ( {type: 'UNFAVORITED', body} );
+
+const errorUnfavorited = (error) => ( {type: 'ERROR_UNFAVORITED', error} );
+
+export const favorites = (favorited, slug) => (dispatch) => {
+	if (favorited) {
+		server.unfavorited(slug, store)
+		.then((response) => {
+			dispatch(responseUnfavorited(response));
+		})
+		.catch((err) => {
+			dispatch(errorUnfavorited(err));
+		});
+	} else {
+		server.favorited(slug, store)
+		.then((response) => {
+			dispatch(responseUnfavorited(response));
+		})
+		.catch((err) => {
+			dispatch(errorUnfavorited(err));
+		});
+	}
+}

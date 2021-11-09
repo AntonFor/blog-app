@@ -15,14 +15,11 @@ import classes from './create-article.module.scss';
 
 const CreateArticle = ({ createArticle, history }) => {
 	const onFinish = (values) => {
-		console.log('Success:', values);
 		createArticle(values);
 		history.push("/");
 	};
 	
-	const onFinishFailed = (errorInfo) => {
-		console.log('Failed:', errorInfo);
-	};
+	const onFinishFailed = () => {};
 	
 	return (
 		<Form
@@ -96,8 +93,7 @@ const CreateArticle = ({ createArticle, history }) => {
 
 CreateArticle.defaultProps = {
 	createArticle: () => {},
-	history: {},
-	// updateArticles: () => {}
+	history: {}
 }
 
 CreateArticle.propTypes = {
@@ -107,17 +103,15 @@ CreateArticle.propTypes = {
     PropTypes.number,
     PropTypes.object,
 		PropTypes.func
-  ]),
-	// updateArticles: PropTypes.func
+  ])
 }
 
-const mapStateToProps = () => {}
+const mapStateToProps = () => ({})
 
 const mapDispatchToProps = (dispatch) => {
 	const { createArticle } = bindActionCreators(actions, dispatch);
 	return ({
-		createArticle,
-		// updateArticles: articles
+		createArticle
 	})
 }
 

@@ -1,9 +1,10 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import PropTypes from 'prop-types';
+import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
-import { HeartOutlined } from '@ant-design/icons';
+import { HeartOutlined, HeartTwoTone } from '@ant-design/icons';
 
 import { format } from 'date-fns';
 
@@ -19,6 +20,8 @@ const ArticleItem = ({ article, history }) => {
 		history.push(`/articles/${id}`)
 	}
 
+	const heartIcon = article.favorited ? <HeartTwoTone twoToneColor="red" /> : <HeartOutlined />;
+
 	return (
 		<div className={classes.container}>
 			<div className={classes.content}>
@@ -26,7 +29,7 @@ const ArticleItem = ({ article, history }) => {
 					<div role="button" tabIndex={0} onClick={(event) => {onClickTitle(event)}} onKeyPress={(event) => {onClickTitle(event)}}>
 						<h2 id={article.slug} className={classes.content__heading}>{article.title}</h2>
 					</div>
-					<HeartOutlined />
+					{heartIcon}
 					<span className={classes.content__number}>{article.favoritesCount}</span>
 				</div>
 				<div className={classes.content__tag}>
@@ -66,6 +69,7 @@ ArticleItem.propTypes = {
 			image: PropTypes.string
 		}),
 		updatedAt: PropTypes.string,
+		favorited: PropTypes.bool
 	}),
 	history: PropTypes.oneOfType([
 		PropTypes.string,
