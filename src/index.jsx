@@ -7,7 +7,7 @@ import reduxThunk from 'redux-thunk';
 
 import App from './components/app';
 
-import reducer from './reducer';
+import reducer from './redux/reducer/reducer';
 
 const composeEnhancers =
   typeof window === 'object' &&

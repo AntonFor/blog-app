@@ -69,7 +69,7 @@ export const createArticle = (state, dataAccount) => {
 }
 
 export const resetUserEdit = (state) => {
-	const newState = {...state, userEdit: false};
+	const newState = {...state, userEdit: false, imgError: false};
 	return newState;
 }
 
@@ -98,5 +98,10 @@ export const errorDeleteArticle = (state, error) => {
 
 export const unfavorited = (state, dataArticle) => {
 	const newState = {...state, article: dataArticle.article};
+	return newState;
+}
+
+export const setImgError = (state) => {
+	const newState = {...state, imgError: true};
 	return newState;
 }

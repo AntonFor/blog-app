@@ -7,7 +7,7 @@ import { PropTypes } from 'prop-types';
 
 import { Form, Input, Button } from 'antd';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import Tags from '../tags';
 

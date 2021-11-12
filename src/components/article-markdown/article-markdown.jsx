@@ -13,7 +13,7 @@ import { HeartOutlined, HeartTwoTone, ExclamationCircleOutlined } from '@ant-des
 
 import { format } from 'date-fns';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import classes from './article-markdown.module.scss';
 

@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-cycle */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
@@ -10,15 +11,22 @@ import { Form, Input, Button } from 'antd';
 
 import AlertErr from '../alert';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import classes from './profile-page.module.scss';
 
-const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit }) => {
+const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit, user, imgError }) => {
 	useEffect(() => {
 		if (!userEdit) history.push("/profile");
 		else history.push("/");
 	}, [userEdit]);
+
+	const [form] = Form.useForm();
+  const [, forceUpdate] = useState({});
+
+  useEffect(() => {
+    forceUpdate({});
+  }, []);
 
 	const onFinish = (values) => {
 		onClickEdit(values);
@@ -27,9 +35,12 @@ const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit }) => {
 	const onFinishFailed = () => {};
 
 	const alertErr = errorEditAccount ? <AlertErr description="Username or email already taken" /> : null;
+	const alertErrImg = imgError ? <AlertErr description="The image does not exist at the specified URL" /> : null;
+
 
 	return (
 		<Form
+			form={form}
       name="normal_profile"
       className={classes["profile-form"]}
       initialValues={{
@@ -37,8 +48,13 @@ const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit }) => {
       }}
       onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
+			initialValues={{
+        username: user.username,
+				email: user.email
+      }}
     >
 			{alertErr}
+			{alertErrImg}
 			<h1 className={classes["profile-form__heading"]}>Edit Profile</h1>
 			<p className={classes["profile-form__title"]}>Username</p>
       <Form.Item
@@ -117,14 +133,20 @@ const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit }) => {
         />
       </Form.Item>
 
-      <Form.Item className={classes["profile-form__button-container"]}>
-        <Button 
-					className={classes["profile-form__button"]}
-					type="primary"
-					htmlType="submit"
-				>
-					Save
-        </Button>
+      <Form.Item shouldUpdate className={classes["profile-form__button-container"]}>
+				{() => (
+					<Button 
+						className={classes["profile-form__button"]}
+						type="primary"
+						htmlType="submit"
+						disabled={
+							!form.isFieldsTouched(true) ||
+							!!form.getFieldsError().filter(({ errors }) => errors.length).length
+						}
+					>
+						Save
+					</Button>
+				)}
       </Form.Item>
     </Form>
 	);
@@ -134,7 +156,9 @@ ProfilePage.defaultProps = {
 	onClickEdit: () => {},
 	history: {},
 	errorEditAccount: false,
-	userEdit: false
+	userEdit: false,
+	user: {},
+	imgError: false
 }
 
 ProfilePage.propTypes = {
@@ -146,14 +170,18 @@ ProfilePage.propTypes = {
 		PropTypes.func
   ]),
 	errorEditAccount: PropTypes.bool,
-	userEdit: PropTypes.bool
+	userEdit: PropTypes.bool,
+	user: PropTypes.objectOf(PropTypes.string),
+	imgError: PropTypes.bool
 }
 
 const mapStateToProps = (state) => {
-	const { errorEditAccount, userEdit } = state;
+	const { errorEditAccount, userEdit, user, imgError } = state;
 	return({
 		errorEditAccount,
-		userEdit
+		userEdit,
+		user,
+		imgError
 	})
 }
 

@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
 import { BrowserRouter, Route } from 'react-router-dom';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import classes from './app.module.scss';
 import 'antd/dist/antd.css';

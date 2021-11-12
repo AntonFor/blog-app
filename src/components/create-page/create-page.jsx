@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-cycle */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
@@ -10,7 +10,7 @@ import { Form, Input, Button, Checkbox } from 'antd';
 
 import AlertErr from '../alert';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import classes from './create-page.module.scss';
 import './create-page.css';
@@ -20,6 +20,13 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 		if (user === null) history.push("/sign-up");
 		else history.push("/");
 	}, [user]);
+
+	const [form] = Form.useForm();
+  const [, forceUpdate] = useState({});
+
+  useEffect(() => {
+    forceUpdate({});
+  }, []);
 	
 	const onFinish = (values) => {
 		onClickCreate(values);
@@ -31,6 +38,7 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 
 	return (
 		<Form
+			form={form}
 			name="normal_create"
 			className={classes["create-form"]}
 			initialValues={{
@@ -142,14 +150,20 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 				<Checkbox className={classes["create-form__checkbox"]}>I agree to the processing of my personal information</Checkbox>
 			</Form.Item>
 	
-			<Form.Item className={classes["create-form__button-container"]}>
-				<Button 
-					className={classes["create-form__button"]}
-					type="primary"
-					htmlType="submit"
-				>
-					Create
-				</Button>
+			<Form.Item shouldUpdate className={classes["create-form__button-container"]}>
+				{() => (
+					<Button 
+						className={classes["create-form__button"]}
+						type="primary"
+						htmlType="submit"
+						disabled={
+							!form.isFieldsTouched(true) ||
+							!!form.getFieldsError().filter(({ errors }) => errors.length).length
+						}
+					>
+						Create
+					</Button>
+				)}
 			</Form.Item>
 			<p className={classes["create-form__ref"]}>Already have an account? <Link to="/sign-in">Sign In.</Link></p>
 		</Form>

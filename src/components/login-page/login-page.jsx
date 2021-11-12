@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-cycle */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
@@ -10,7 +10,7 @@ import { Form, Input, Button } from 'antd';
 
 import AlertErr from '../alert';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import classes from './login-page.module.scss';
 
@@ -19,6 +19,13 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
 		if (!logIn) history.push("/sign-in");
 		else history.push("/");
 	}, [logIn]);
+
+	const [form] = Form.useForm();
+  const [, forceUpdate] = useState({});
+
+  useEffect(() => {
+    forceUpdate({});
+  }, []);
 
 	const onFinish = (values) => {
 		onClickLogIn(values);
@@ -30,6 +37,7 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
 	
 	return (
 		<Form
+			form={form}
       name="normal_login"
       className={classes["login-form"]}
       initialValues={{
@@ -76,10 +84,17 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
         />
       </Form.Item>
 
-      <Form.Item className={classes["login-form__button-container"]}>
-        <Button className={classes["login-form__button"]} type="primary" htmlType="submit">
-          Log in
-        </Button>
+      <Form.Item shouldUpdate className={classes["login-form__button-container"]}>
+				{() => (
+					<Button className={classes["login-form__button"]} type="primary" htmlType="submit"
+						disabled={
+							!form.isFieldsTouched(true) ||
+							!!form.getFieldsError().filter(({ errors }) => errors.length).length
+						}
+					>
+						Log in
+					</Button>
+				)}
       </Form.Item>
 			<p className={classes["login-form__ref"]}>Don’t have an account? <Link to="/sign-up">Sign Up.</Link></p>
     </Form>

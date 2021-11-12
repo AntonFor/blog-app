@@ -1,22 +1,8 @@
 import { updateArticles, errorArticles, createAccount, logOut, logIn, editProfile, createArticle, 
 	errorAccount, errorProfile, resetUserEdit, logError, changePage, editArticle, deleteArticle,
-	errorDeleteArticle, unfavorited } from './utilities/utilities';
+	errorDeleteArticle, unfavorited, setImgError } from '../../utilities/utilities';
 
-const dateState = {
-	loading: true,
-	error: false,
-	errorCreateAccount: false,
-	errorEditAccount: false,
-	errorLogIn: false,
-	isLogIn: false,
-	articles: [],
-	user: null,
-	article: null,
-	userEdit: false,
-	logIn: false,
-	articlesCount: 0,
-	currentPage: 1
-}
+import dateState from '../state';
 
 const reducer = (state = dateState, action) => {
 	switch (action.type) {
@@ -36,6 +22,7 @@ const reducer = (state = dateState, action) => {
 		case 'DELETE_ARTICLE': return deleteArticle(state)
 		case 'ERROR_DELETE_ARTICLE': return errorDeleteArticle(state, action.error)
 		case 'UNFAVORITED': return unfavorited(state, action.body)
+		case 'SET_IMG_ERROR': return setImgError(state)
 		default: return state;
 	}
 }

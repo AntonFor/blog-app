@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-cycle */
-import store from './index.jsx';
-import server from './services/server';
+import store from '../../index.jsx';
+import server from '../../services/server';
 
 const responseArticles = (body) => ( {type: 'UPDATE_ARTICLES', body} );
 
@@ -116,3 +116,5 @@ export const favorites = (favorited, slug) => (dispatch) => {
 		});
 	}
 }
+
+export const imgIsError = () => ( {type: 'SET_IMG_ERROR'} );

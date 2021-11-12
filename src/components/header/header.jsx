@@ -3,19 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import classes from './header.module.scss';
 
-const Header = ({ isLogIn, user, logOut, resetUserEdit }) => {
+const Header = ({ isLogIn, user, logOut, resetUserEdit, imgIsError, history }) => {
 	const [header, setHeader] = useState(<HeaderIsNotLogIn />);
 	
 	useEffect(() => {
-		if (isLogIn) setHeader(<HeaderIsLogIn user={user} onClickLogOut={logOut} resetUserEdit={resetUserEdit} />)
+		if (isLogIn) setHeader(<HeaderIsLogIn user={user} onClickLogOut={logOut} resetUserEdit={resetUserEdit} imgIsError={imgIsError} history={history} />)
 		else setHeader(<HeaderIsNotLogIn />)
-	}, [isLogIn, user, logOut, resetUserEdit]);
+	}, [isLogIn, user, logOut, resetUserEdit, imgIsError, history]);
 
 	return (
 		<div>
@@ -42,10 +42,15 @@ const HeaderIsNotLogIn = () => (
 	</div>
 );
 
-const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit }) => {
+const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit, imgIsError, history }) => {
 	const { username } = user;
 	let { image } = user;
 	if (image === null) image = 'https://api.realworld.io/images/smiley-cyrus.jpeg';
+
+	const onErrorImg = () => {
+		imgIsError();
+		history.push("/profile");
+	}
 
 	resetUserEdit();
 
@@ -64,7 +69,7 @@ const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit }) => {
 			</span>
 			<Link to="/profile" className={classes["header__avatar-link"]}>
 				<div className={classes.header__avatar}>
-					<img className={classes["header__avatar-img"]} src={image} alt="Avatar"/>
+					<img className={classes["header__avatar-img"]} src={image} alt="Avatar" onError={() => onErrorImg()}/>
 				</div>
 			</Link>
 			<Link to="/" className={classes["header__link-sign-out"]}>
@@ -80,20 +85,31 @@ Header.defaultProps = {
 	isLogIn: false,
 	user: {},
 	logOut: () => {},
-	resetUserEdit: () => {}
+	resetUserEdit: () => {},
+	imgIsError: () => {},
+	history: {}
 }
 
 Header.propTypes = {
 	isLogIn: PropTypes.bool,
 	user: PropTypes.objectOf(PropTypes.string),
 	logOut: PropTypes.func,
-	resetUserEdit: PropTypes.func
+	resetUserEdit: PropTypes.func,
+	imgIsError: PropTypes.func,
+	history: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+		PropTypes.func
+  ])
 }
 
 HeaderIsLogIn.defaultProps = {
 	user: {},
 	onClickLogOut: () => {},
-	resetUserEdit: () => {}
+	resetUserEdit: () => {},
+	imgIsError: () => {},
+	history: {}
 }
 
 HeaderIsLogIn.propTypes = {
@@ -102,7 +118,14 @@ HeaderIsLogIn.propTypes = {
 		image: PropTypes.string
 	}),
 	onClickLogOut: PropTypes.func,
-	resetUserEdit: PropTypes.func
+	resetUserEdit: PropTypes.func,
+	imgIsError: PropTypes.func,
+	history: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+		PropTypes.func
+  ])
 }
 
 const mapStateToProps = (state) => {
@@ -114,11 +137,12 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-	const { logOut, resetUserEdit } = bindActionCreators(actions, dispatch);
+	const { logOut, resetUserEdit, imgIsError } = bindActionCreators(actions, dispatch);
 	return ({
 		logOut,
-		resetUserEdit
+		resetUserEdit,
+		imgIsError
 	})
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

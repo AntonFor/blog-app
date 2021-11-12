@@ -6,7 +6,7 @@ import { PropTypes } from 'prop-types';
 
 import { Pagination } from 'antd';
 
-import * as actions from '../../actions';
+import * as actions from '../../redux/actions/actions';
 
 import classes from './pagin.module.scss';
 
