@@ -2,119 +2,88 @@
 /* eslint-disable import/no-cycle */
 import store from '../../index.jsx';
 import server from '../../services/server';
+import { creatorActionObj } from '../../utilities/utilities';
 
-const responseArticles = (body) => ( {type: 'UPDATE_ARTICLES', body} );
-
-const errorArticles = (error) => ( {type: 'ERROR_ARTICLES', error} );
-
-export const articles = () => (dispatch) => server.getArticles(store)
+export const getArticles = () => (dispatch) => server.getArticles(store)
 	.then((response) => {
-		dispatch(responseArticles(response));
+		dispatch(creatorActionObj('UPDATE_ARTICLES', response));
 	})	
 	.catch((err) => {
-		dispatch(errorArticles(err));
+		dispatch(creatorActionObj('ERROR_ARTICLES', err));
 	});
-
-const responseCreateAccount = (body, data) => ( {type: 'CREATE_ACCOUNT', body, data} );
-
-const errorCreateAccount = (error) => ( {type: 'ERROR_ACCOUNT', error} );
 
 export const createAccount = (data) => (dispatch) => server.setNewAccount(data)
 	.then((response) => {
-		dispatch(responseCreateAccount(response, data));
+		dispatch(creatorActionObj('CREATE_ACCOUNT', response, data));
 	})
 	.catch((err) => {
-		dispatch(errorCreateAccount(err));
+		dispatch(creatorActionObj('ERROR_ACCOUNT', err));
 	});
 
-export const logOut = () => ( {type: 'LOG_OUT'} );
-
-const responseLogIn = (body, data) => ( {type: 'LOG_IN', body, data} );
-
-const errorLogIn = (error) => ( {type: 'LOG_ERROR', error} );
+export const logOut = () => creatorActionObj('LOG_OUT');
 
 export const logIn = (data) => (dispatch) => server.logIn(data)
 	.then((response) => {
-		dispatch(responseLogIn(response, data));
+		dispatch(creatorActionObj('LOG_IN', response, data));
 	})
 	.catch((err) => {
-		dispatch(errorLogIn(err));
+		dispatch(creatorActionObj('LOG_ERROR', err));
 	});
 
-const responseEditProfile = (body, data) => ( {type: 'EDIT_PROFILE', body, data} );
+export const editProfile = (data) => (dispatch) => server.updateProfile(data)
+	.then((response) => {
+		dispatch(creatorActionObj('EDIT_PROFILE', response, data));
+	})
+	.catch((err) => {
+		dispatch(creatorActionObj('ERROR_PROFILE', err));
+	});
 
-const errorEditProfile = (error) => ( {type: 'ERROR_PROFILE', error} );
+export const createArticle = (data) => (dispatch) => server.setNewArticle(data)
+	.then((response) => {
+		dispatch(creatorActionObj('CREATE_ARTICLE', response));
+	})
+	.catch((err) => {
+		dispatch(creatorActionObj('ERROR_ARTICLE', err));
+	});
 
-export const editProfile = (data) => (dispatch) => server.updateProfile(data, store)
-.then((response) => {
-	dispatch(responseEditProfile(response, data));
-})
-.catch((err) => {
-	dispatch(errorEditProfile(err));
-});
+export const resetUserEdit = () => creatorActionObj('RESET_USER_EDIT');
 
-const responseCreateArticle = (body) => ( {type: 'CREATE_ARTICLE', body} );
+export const changePage = (page) => creatorActionObj('CHANGE_PAGE', page);
 
-const errorCreateArticle = (error) => ( {type: 'ERROR_ARTICLE', error} );
+export const editArticle = (data, slug) => (dispatch) => server.editArticle(data, slug)
+	.then((response) => {
+		dispatch(creatorActionObj('EDIT_ARTICLE', response));
+	})
+	.catch((err) => {
+		dispatch(creatorActionObj('ERROR_EDIT_ARTICLE', err));
+	});
 
-export const createArticle = (data) => (dispatch) => server.setNewArticle(data, store)
-.then((response) => {
-	dispatch(responseCreateArticle(response));
-})
-.catch((err) => {
-	dispatch(errorCreateArticle(err));
-});
-
-export const resetUserEdit = () => ( {type: 'RESET_USER_EDIT'} );
-
-export const changePage = (page) => ( {type: 'CHANGE_PAGE', page} );
-
-const responseEditArticle = (body) => ( {type: 'EDIT_ARTICLE', body} );
-
-const errorEditArticle = (error) => ( {type: 'ERROR_EDIT_ARTICLE', error} );
-
-export const editArticle = (data, slug) => (dispatch) => server.editArticle(data, slug, store)
-.then((response) => {
-	dispatch(responseEditArticle(response));
-})
-.catch((err) => {
-	dispatch(errorEditArticle(err));
-});
-
-const responseDeleteArticle = () => ( {type: 'DELETE_ARTICLE'} );
-
-const errorDeleteArticle = (error) => ( {type: 'ERROR_DELETE_ARTICLE', error} );
-
-export const deleteArticle = (slug) => (dispatch) => server.deleteArticle(slug, store)
-.then(() => {
-	dispatch(responseDeleteArticle());
-})
-.catch((err) => {
-	dispatch(errorDeleteArticle(err));
-});
-
-const responseUnfavorited = (body) => ( {type: 'UNFAVORITED', body} );
-
-const errorUnfavorited = (error) => ( {type: 'ERROR_UNFAVORITED', error} );
+export const deleteArticle = (slug) => (dispatch) => server.deleteArticle(slug)
+	.then(() => {
+		dispatch(creatorActionObj('DELETE_ARTICLE'));
+	})
+	.catch((err) => {
+		dispatch(creatorActionObj('ERROR_DELETE_ARTICLE', err));
+	});
 
 export const favorites = (favorited, slug) => (dispatch) => {
 	if (favorited) {
-		server.unfavorited(slug, store)
-		.then((response) => {
-			dispatch(responseUnfavorited(response));
-		})
-		.catch((err) => {
-			dispatch(errorUnfavorited(err));
-		});
+		server.unfavorited(slug)
+			.then((response) => {
+				dispatch(creatorActionObj('UNFAVORITED', response));
+			})
+			.catch((err) => {
+				dispatch(creatorActionObj('ERROR_UNFAVORITED', err));
+			});
 	} else {
-		server.favorited(slug, store)
-		.then((response) => {
-			dispatch(responseUnfavorited(response));
-		})
-		.catch((err) => {
-			dispatch(errorUnfavorited(err));
-		});
+		server.favorited(slug)
+			.then((response) => {
+				dispatch(creatorActionObj('UNFAVORITED', response));
+			})
+			.catch((err) => {
+				dispatch(creatorActionObj('ERROR_UNFAVORITED', err));
+			});
 	}
 }
 
-export const imgIsError = () => ( {type: 'SET_IMG_ERROR'} );
+export const imgIsError = () => creatorActionObj('SET_IMG_ERROR');

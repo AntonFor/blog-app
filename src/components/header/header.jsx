@@ -97,11 +97,11 @@ Header.propTypes = {
 	resetUserEdit: PropTypes.func,
 	imgIsError: PropTypes.func,
 	history: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.func
-  ])
+	])
 }
 
 HeaderIsLogIn.defaultProps = {
@@ -121,11 +121,11 @@ HeaderIsLogIn.propTypes = {
 	resetUserEdit: PropTypes.func,
 	imgIsError: PropTypes.func,
 	history: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.func
-  ])
+	])
 }
 
 const mapStateToProps = (state) => {

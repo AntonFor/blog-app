@@ -22,11 +22,11 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 	}, [user]);
 
 	const [form] = Form.useForm();
-  const [, forceUpdate] = useState({});
+	const [, forceUpdate] = useState({});
 
-  useEffect(() => {
-    forceUpdate({});
-  }, []);
+	useEffect(() => {
+		forceUpdate({});
+	}, []);
 	
 	const onFinish = (values) => {
 		onClickCreate(values);
@@ -180,11 +180,11 @@ CreatePage.defaultProps = {
 CreatePage.propTypes = {
 	onClickCreate: PropTypes.func,
 	history: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.func
-  ]),
+	]),
 	errorCreateAccount: PropTypes.bool,
 	user: PropTypes.objectOf(PropTypes.string)
 }

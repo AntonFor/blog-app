@@ -21,11 +21,11 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
 	}, [logIn]);
 
 	const [form] = Form.useForm();
-  const [, forceUpdate] = useState({});
+	const [, forceUpdate] = useState({});
 
-  useEffect(() => {
-    forceUpdate({});
-  }, []);
+	useEffect(() => {
+		forceUpdate({});
+	}, []);
 
 	const onFinish = (values) => {
 		onClickLogIn(values);
@@ -38,53 +38,53 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
 	return (
 		<Form
 			form={form}
-      name="normal_login"
-      className={classes["login-form"]}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
+			name="normal_login"
+			className={classes["login-form"]}
+			initialValues={{
+				remember: true,
+			}}
+			onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
-    >
+		>
 			{alertErr}
 			<h1 className={classes["login-form__heading"]}>Sign In</h1>
 			<p className={classes["login-form__title"]}>Email address</p>
-      <Form.Item
-        className={classes["login-form__input-email"]}
+			<Form.Item
+				className={classes["login-form__input-email"]}
 				name="email"
-        rules={[
+				rules={[
 					{
-            type: 'email',
-            message: 'The input is not valid E-mail!',
-          },
-          {
-            required: true,
-            message: 'Please input your Email address!',
-          },
-        ]}
-      >
-        <Input
+						type: 'email',
+						message: 'The input is not valid E-mail!',
+					},
+					{
+						required: true,
+						message: 'Please input your Email address!',
+					},
+				]}
+			>
+				<Input
 					type="email"
 					placeholder="Email address"
 				/>
-      </Form.Item>
-      <p className={classes["login-form__title"]}>Password</p>
+			</Form.Item>
+			<p className={classes["login-form__title"]}>Password</p>
 			<Form.Item
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Password!',
-          },
-        ]}
-      >
-        <Input
-          type="password"
-          placeholder="Password"
-        />
-      </Form.Item>
+				name="password"
+				rules={[
+					{
+						required: true,
+						message: 'Please input your Password!',
+					},
+				]}
+			>
+				<Input
+					type="password"
+					placeholder="Password"
+				/>
+			</Form.Item>
 
-      <Form.Item shouldUpdate className={classes["login-form__button-container"]}>
+			<Form.Item shouldUpdate className={classes["login-form__button-container"]}>
 				{() => (
 					<Button className={classes["login-form__button"]} type="primary" htmlType="submit"
 						disabled={
@@ -95,9 +95,9 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
 						Log in
 					</Button>
 				)}
-      </Form.Item>
+			</Form.Item>
 			<p className={classes["login-form__ref"]}>Don’t have an account? <Link to="/sign-up">Sign Up.</Link></p>
-    </Form>
+		</Form>
 	);
 }
 
@@ -111,11 +111,11 @@ LoginPage.defaultProps = {
 LoginPage.propTypes = {
 	onClickLogIn: PropTypes.func,
 	history: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.func
-  ]),
+	]),
 	errorLogIn: PropTypes.bool,
 	logIn: PropTypes.bool
 }

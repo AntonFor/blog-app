@@ -1,6 +1,12 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-return-await */
+import { getOfset, getToken, getTags } from '../utilities/utilities';
+
 class Server {
+	url = 'https://api.realworld.io/api/';
+
+	headers = new Headers({'Content-Type': 'application/json'});
+
 	async getResource(url, obj = null) {
 		const response = await fetch(url, obj);
 		if (response.status !== 200) throw new Error(response.status);
@@ -10,129 +16,108 @@ class Server {
 	getArticles(store) {
 		const state = store.getState();
 		const { user, currentPage } = state;
-		let token;
-		const ofset = (currentPage - 1) * 10;
-		if (user === null) token = '';
-		else token = user.token;
-		return this.getResource(`https://api.realworld.io/api/articles?limit=10&offset=${ofset}`, {
-			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${token}`}
+		this.headers.set('Authorization', `Bearer ${getToken(user)}`);
+		return this.getResource(`${this.url}articles?limit=10&offset=${getOfset(currentPage)}`, {
+			headers: this.headers
 		});
 	}
 
 	setNewAccount(value) {
 		const requestBody = {
-			"user": {
-				"username": value.username,
-				"email": value.email,
-				"password": value.password
+			user: {
+				username: value.username,
+				email: value.email,
+				password: value.password
 			}
 		};
-		return this.getResource('https://api.realworld.io/api/users', {
+		return this.getResource(`${this.url}users`, {
 			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
+			headers: this.headers,
 			body: JSON.stringify(requestBody)
 		});
 	}
 
 	logIn(value) {
 		const requestBody = {
-			"user": {
-				"email": value.email,
-				"password": value.password
+			user: {
+				email: value.email,
+				password: value.password
 			}
 		};
-		return this.getResource('https://api.realworld.io/api/users/login', {
+		return this.getResource(`${this.url}users/login`, {
 			method: 'POST',
-			headers: {'Content-Type': 'application/json'},
+			headers: this.headers,
 			body: JSON.stringify(requestBody)
 		});
 	}
 
-	updateProfile(value, store) {
-		const state = store.getState();
+	updateProfile(value) {
 		let requestBody = {
-			"user": {
-				"username": value.username,
-				"email": value.email
+			user: {
+				username: value.username,
+				email: value.email
 			}
 		};
 		const { user } = requestBody;
-		if (value.password !== undefined) requestBody = {"user": { ...user, "password": value.password }};
-		if (value.avatar !== undefined) requestBody = {"user": { ...user, "image": value.avatar }};
-		return this.getResource('https://api.realworld.io/api/user', {
+		if (value.password !== undefined) requestBody = {user: { ...user, password: value.password }};
+		if (value.avatar !== undefined) requestBody = {user: { ...user, image: value.avatar }};
+		return this.getResource(`${this.url}user`, {
 			method: 'PUT',
-			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`},
+			headers: this.headers,
 			body: JSON.stringify(requestBody)
 		});
 	}
 
-	setNewArticle(value, store) {
-		const state = store.getState();
-		const arrKeys = Object.keys(value);
-		const tags = [];
-		arrKeys.forEach((item) => {
-			const str = item.slice("-", 3);
-			if (str === 'tag') tags.push(value[item]);
-		});
+	setNewArticle(value) {
 		const requestBody = {
-			"article": {
-				"title": value.title,
-				"description": value.description,
-				"body": value.text,
-				"tagList": tags
+			article: {
+				title: value.title,
+				description: value.description,
+				body: value.text,
+				tagList: getTags(value)
 			}
 		};
-		return this.getResource('https://api.realworld.io/api/articles', {
+		return this.getResource(`${this.url}articles`, {
 			method: 'POST',
-			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`},
+			headers: this.headers,
 			body: JSON.stringify(requestBody)
 		});
 	}
 
-	editArticle(value, slug, store) {
-		const state = store.getState();
-		const arrKeys = Object.keys(value);
-		const tags = [];
-		arrKeys.forEach((item) => {
-			const str = item.slice("-", 3);
-			if (str === 'tag') tags.push(value[item]);
-		});
+	editArticle(value, slug) {
 		const requestBody = {
-			"article": {
-				"title": value.title,
-				"description": value.description,
-				"body": value.text,
-				"tagList": tags
+			article: {
+				title: value.title,
+				description: value.description,
+				body: value.text,
+				tagList: getTags(value)
 			}
 		};
-		return this.getResource(`https://api.realworld.io/api/articles/${slug}`, {
+		return this.getResource(`${this.url}articles/${slug}`, {
 			method: 'PUT',
-			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`},
+			headers: this.headers,
 			body: JSON.stringify(requestBody)
 		});
 	}
 
-	deleteArticle(slug, store) {
-		const state = store.getState();
-		return this.getResource(`https://api.realworld.io/api/articles/${slug}`, {
+	deleteArticle(slug) {
+		return this.getResource(`${this.url}articles/${slug}`, {
 			method: 'DELETE',
-			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`}
+			headers: this.headers
 		});
 	}
 
-	unfavorited(slug, store) {
-		const state = store.getState();
-		return this.getResource(`https://api.realworld.io/api/articles/${slug}/favorite`, {
+	unfavorited(slug) {
+		return this.getResource(`${this.url}articles/${slug}/favorite`, {
 			method: 'DELETE',
-			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`}
+			headers: this.headers
 		});
 	}
 
-	favorited(slug, store) {
-		const state = store.getState();
-		return this.getResource(`https://api.realworld.io/api/articles/${slug}/favorite`, {
+	favorited(slug) {
+		return this.getResource(`${this.url}articles/${slug}/favorite`, {
 			method: 'POST',
-			headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${state.user.token}`}
+			headers: this.headers
 		});
 	}
 }

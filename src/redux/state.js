@@ -1,4 +1,4 @@
-const dateState = {
+const initialState = {
 	loading: true,
 	error: false,
 	errorCreateAccount: false,
@@ -15,4 +15,4 @@ const dateState = {
 	imgError: false
 }
 
-export default dateState;
+export default initialState;

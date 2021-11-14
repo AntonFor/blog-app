@@ -88,27 +88,27 @@ ArticleMarkdown.defaultProps = {
 ArticleMarkdown.propTypes = {
 	articles: PropTypes.arrayOf(PropTypes.object),
 	match: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.object,
+		PropTypes.bool,
+		PropTypes.object,
 		PropTypes.string
-  ]),
+	]),
 	user: PropTypes.objectOf(PropTypes.string),
 	history: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.func
-  ]),
+	]),
 	deleteArticle: PropTypes.func,
 	favorites: PropTypes.func,
 	article: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.arrayOf(PropTypes.string),
 		PropTypes.arrayOf(PropTypes.string),
 		PropTypes.bool
-  ])
+	])
 }
 
 const mapStateToProps = (state) => {
@@ -168,10 +168,10 @@ ButtonGroup.defaultProps = {
 ButtonGroup.propTypes = {
 	slug: PropTypes.string,
 	history: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.func
-  ]),
+	]),
 	deleteArticle: PropTypes.func
 }

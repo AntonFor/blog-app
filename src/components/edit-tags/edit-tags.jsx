@@ -35,7 +35,7 @@ const EditTags = ({ tags }) => {
 			const idx = tag.findIndex((el) => el.id === id);
 			const oldItem = tag[idx];
 			const newItem = { ...oldItem, text: value };
-      const arr = [...tag.slice(0, idx), newItem, ...tag.slice(idx + 1)];
+			const arr = [...tag.slice(0, idx), newItem, ...tag.slice(idx + 1)];
 			return arr;
 		});
 	}

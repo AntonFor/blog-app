@@ -105,3 +105,36 @@ export const setImgError = (state) => {
 	const newState = {...state, imgError: true};
 	return newState;
 }
+
+export const creatorActionObj = (type, ...arg) => {
+	let obj = {
+		type
+	};
+	const [ body = null, data = null ] = arg;
+	obj = {...obj, body, data};
+	return obj;
+}
+
+export const getOfset = (currentPage) => ((currentPage - 1) * 10);
+
+export const getToken = (obj) => {
+	if (obj === null) return '';
+	return obj.token;
+}
+
+export const getTags = (value) => {
+	const arrKeys = Object.keys(value);
+	let tags = [];
+	arrKeys.forEach((item) => {
+		const str = item.slice("-", 3);
+		if (str === 'tag') tags.push(value[item]);
+	});
+	if (tags[0] === undefined) tags = [];
+	return tags;
+}
+
+export const getPassword = () => {
+	const user = sessionStorage.getItem('user');
+	const getUser = JSON.parse(user);
+	return getUser.password;
+}

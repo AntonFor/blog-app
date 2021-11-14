@@ -5,11 +5,11 @@ import { Alert } from 'antd';
 
 const AlertErr = ({ description }) => (
 	<Alert
-    message="Error"
+		message="Error"
 		description={description}
-    type="error"
-    showIcon
-  />
+		type="error"
+		showIcon
+	/>
 )
 
 AlertErr.defaultProps = {

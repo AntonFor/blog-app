@@ -68,13 +68,13 @@ App.defaultProps = {
 App.propTypes = {
 	updateArticles: PropTypes.func,
 	article: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.arrayOf(PropTypes.string),
 		PropTypes.arrayOf(PropTypes.string),
 		PropTypes.bool
-  ]),
+	]),
 	logIn: PropTypes.func,
 	user: PropTypes.objectOf(PropTypes.string),
 	currentPage: PropTypes.number,
@@ -93,9 +93,9 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-	const { articles, logIn } = bindActionCreators(actions, dispatch);
+	const { getArticles, logIn } = bindActionCreators(actions, dispatch);
 	return ({
-		updateArticles: articles,
+		updateArticles: getArticles,
 		logIn
 	})
 }

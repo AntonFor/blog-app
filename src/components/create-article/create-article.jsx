@@ -23,71 +23,71 @@ const CreateArticle = ({ createArticle, history }) => {
 	
 	return (
 		<Form
-      name="article_create"
-      className={classes["create-form"]}
-      initialValues={{
-        remember: true,
-      }}
-      onFinish={onFinish}
+			name="article_create"
+			className={classes["create-form"]}
+			initialValues={{
+				remember: true,
+			}}
+			onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
-    >
+		>
 			<h1 className={classes["create-form__heading"]}>Create new article</h1>
 			<p className={classes["create-form__title"]}>Title</p>
-      <Form.Item
-        className={classes["create-form__input-title"]}
+			<Form.Item
+				className={classes["create-form__input-title"]}
 				name="title"
-        rules={[
-          {
-            required: true,
+				rules={[
+					{
+						required: true,
 						message: 'Please input title article!',
-          },
-        ]}
-      >
-        <Input placeholder="Title" />
-      </Form.Item>
+					},
+				]}
+			>
+				<Input placeholder="Title" />
+			</Form.Item>
 
 			<p className={classes["create-form__description"]}>Short description</p>
-      <Form.Item
-        className={classes["create-form__input-description"]}
+			<Form.Item
+				className={classes["create-form__input-description"]}
 				name="description"
-        rules={[
-          {
-            required: true,
-            message: 'Please input short description article!',
-          },
-        ]}
-      >
-        <Input
+				rules={[
+					{
+						required: true,
+						message: 'Please input short description article!',
+					},
+				]}
+			>
+				<Input
 					placeholder="Short description"
 				/>
-      </Form.Item>
+			</Form.Item>
 
-      <p className={classes["create-form__text"]}>Text</p>
+			<p className={classes["create-form__text"]}>Text</p>
 			<Form.Item
 				className={classes["create-form__input-text"]}
-        name="text"
-        rules={[
-          {
-            required: true,
-            message: 'Please input text article!',
-          },
-        ]}
-      >
-        <Input.TextArea placeholder="Text" autoSize={{ minRows: 7, maxRows: 7 }} />
-      </Form.Item>
+				name="text"
+				rules={[
+					{
+						required: true,
+						message: 'Please input text article!',
+					},
+				]}
+			>
+				<Input.TextArea placeholder="Text" autoSize={{ minRows: 7, maxRows: 7 }} />
+			</Form.Item>
 
 			<div><Tags /></div>
 
-      <Form.Item className={classes["create-form__button-container"]}>
-        <Button 
+			<Form.Item className={classes["create-form__button-container"]}>
+				<Button 
 					className={classes["create-form__button"]}
 					type="primary"
 					htmlType="submit"
 				>
 					Send
-        </Button>
-      </Form.Item>
-    </Form>
+				</Button>
+			</Form.Item>
+		</Form>
 	);
 }
 
@@ -99,11 +99,11 @@ CreateArticle.defaultProps = {
 CreateArticle.propTypes = {
 	createArticle: PropTypes.func,
 	history: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
+		PropTypes.string,
+		PropTypes.number,
+		PropTypes.object,
 		PropTypes.func
-  ])
+	])
 }
 
 const mapStateToProps = () => ({})

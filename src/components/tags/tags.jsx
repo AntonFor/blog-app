@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import { PropTypes } from 'prop-types';
 
 import { Form, Input } from 'antd';
 import { v4 as uuidv4 } from 'uuid';
@@ -33,7 +34,7 @@ const Tags = () => {
 			const idx = tag.findIndex((el) => el.id === id);
 			const oldItem = tag[idx];
 			const newItem = { ...oldItem, text: value };
-      const arr = [...tag.slice(0, idx), newItem, ...tag.slice(idx + 1)];
+			const arr = [...tag.slice(0, idx), newItem, ...tag.slice(idx + 1)];
 			return arr;
 		});
 	}
@@ -41,23 +42,7 @@ const Tags = () => {
 	useEffect(() => {
 		setElements(() => {
 			const arr = tag.map(item => (
-				<li key={item.id} id={item.id} className={classes.tag}>
-					<Form.Item
-						className={classes.tag__item}
-						name={`tag-${item.id}`}
-					>
-						<Input id={item.id} placeholder="Tag" onChange={(event) => onChangeLabel(event)} />
-					</Form.Item>
-
-					<button
-						id={item.id}
-						className={classes["tag__button-delete"]}
-						type="button"
-						onClick={(event) => onClickDelete(event)}
-					>
-						Delete
-					</button>
-				</li>
+				<TagElement key={item.id} item={item} onChangeLabel={onChangeLabel} onClickDelete={onClickDelete} />
 			));
 			return arr;
 		});
@@ -78,6 +63,38 @@ const Tags = () => {
 			</div>
 		</div>
 	);
+}
+
+const TagElement = ({ item, onChangeLabel, onClickDelete }) => (
+	<li id={item.id} className={classes.tag}>
+		<Form.Item
+			className={classes.tag__item}
+			name={`tag-${item.id}`}
+		>
+			<Input id={item.id} placeholder="Tag" onChange={(event) => onChangeLabel(event)} />
+		</Form.Item>
+
+		<button
+			id={item.id}
+			className={classes["tag__button-delete"]}
+			type="button"
+			onClick={(event) => onClickDelete(event)}
+		>
+			Delete
+		</button>
+	</li>
+)
+
+TagElement.defaultProps = {
+	item: {},
+	onChangeLabel: () => {},
+	onClickDelete: () => {}
+}
+
+TagElement.propTypes = {
+	item: PropTypes.objectOf(PropTypes.string),
+	onChangeLabel: PropTypes.func,
+	onClickDelete: PropTypes.func
 }
 
 export default Tags;
