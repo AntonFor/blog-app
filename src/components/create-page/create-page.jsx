@@ -134,7 +134,7 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 	
 			<Form.Item
 				className={classes["create-form__checked"]}
-				name="remember"
+				name="agreement"
 				valuePropName="checked"
 				wrapperCol={{
 					offset: 8,

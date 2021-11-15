@@ -19,7 +19,7 @@ import classes from './article-markdown.module.scss';
 
 const { confirm } = Modal;
 
-const ArticleMarkdown = ({ match, articles, user, history, deleteArticle, favorites, article }) => {
+const ArticleMarkdown = ({ match, articles, user, history, deleteArticle, favorites }) => {
 	const [ heartIcon, setHeartIcon ] = useState();
 	
 	const { params } = match;
@@ -32,12 +32,10 @@ const ArticleMarkdown = ({ match, articles, user, history, deleteArticle, favori
 	));
 
 	useEffect(() => {
-		let favorited;
-		if (article === null) favorited = articles[idx].favorited;
-		else favorited = article.favorited;
+		const { favorited } = articles[idx];
 		if (favorited === true) setHeartIcon(<HeartTwoTone twoToneColor="red" onClick={() => favorites(articles[idx].favorited, slug)} />);
 		else setHeartIcon(<HeartOutlined onClick={() => favorites(articles[idx].favorited, slug)} />);
-	}, [article]);
+	}, [articles]);
 
 	const buttonGroup = (user.username === articles[idx].author.username) ? <ButtonGroup slug={slug} history={history} deleteArticle={deleteArticle} /> : null;
 
@@ -81,8 +79,7 @@ ArticleMarkdown.defaultProps = {
 	user: {},
 	history: {},
 	deleteArticle: () => {},
-	favorites: () => {},
-	article: {}
+	favorites: () => {}
 }
 
 ArticleMarkdown.propTypes = {
@@ -100,23 +97,14 @@ ArticleMarkdown.propTypes = {
 		PropTypes.func
 	]),
 	deleteArticle: PropTypes.func,
-	favorites: PropTypes.func,
-	article: PropTypes.oneOfType([
-		PropTypes.string,
-		PropTypes.number,
-		PropTypes.object,
-		PropTypes.arrayOf(PropTypes.string),
-		PropTypes.arrayOf(PropTypes.string),
-		PropTypes.bool
-	])
+	favorites: PropTypes.func
 }
 
 const mapStateToProps = (state) => {
-	const { articles, user, article } = state;
+	const { articles, user } = state;
 	return ({
 		articles,
-		user,
-		article
+		user
 	})
 }
 

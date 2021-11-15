@@ -143,7 +143,7 @@ const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit, user, i
 						type="primary"
 						htmlType="submit"
 						disabled={
-							!form.isFieldsTouched(true) ||
+							!form.isFieldsTouched(false) ||
 							!!form.getFieldsError().filter(({ errors }) => errors.length).length
 						}
 					>
