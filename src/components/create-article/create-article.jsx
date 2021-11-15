@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
@@ -14,6 +14,13 @@ import Tags from '../tags';
 import classes from './create-article.module.scss';
 
 const CreateArticle = ({ createArticle, history }) => {
+	const [form] = Form.useForm();
+	const [, forceUpdate] = useState({});
+
+	useEffect(() => {
+		forceUpdate({});
+	}, []);
+	
 	const onFinish = (values) => {
 		createArticle(values);
 		history.push("/");
@@ -23,6 +30,7 @@ const CreateArticle = ({ createArticle, history }) => {
 	
 	return (
 		<Form
+			form={form}
 			name="article_create"
 			className={classes["create-form"]}
 			initialValues={{
@@ -78,14 +86,20 @@ const CreateArticle = ({ createArticle, history }) => {
 
 			<div><Tags /></div>
 
-			<Form.Item className={classes["create-form__button-container"]}>
-				<Button 
-					className={classes["create-form__button"]}
-					type="primary"
-					htmlType="submit"
-				>
-					Send
-				</Button>
+			<Form.Item shouldUpdate className={classes["create-form__button-container"]}>
+				{() => (
+					<Button 
+						className={classes["create-form__button"]}
+						type="primary"
+						htmlType="submit"
+						disabled={
+							!form.isFieldsTouched(false) ||
+							!!form.getFieldsError().filter(({ errors }) => errors.length).length
+						}
+					>
+						Send
+					</Button>
+				)}
 			</Form.Item>
 		</Form>
 	);

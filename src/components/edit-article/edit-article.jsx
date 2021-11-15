@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 /* eslint-disable import/no-cycle */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
@@ -18,6 +18,13 @@ const EditArticle = ({ history, match, articles, editArticle }) => {
 	const { params } = match;
 	const { slug } = params;
 	const idx = articles.findIndex((el) => el.slug === slug);
+
+	const [form] = Form.useForm();
+	const [, forceUpdate] = useState({});
+
+	useEffect(() => {
+		forceUpdate({});
+	}, []);
 	
 	const onFinish = (values) => {
 		editArticle(values, slug);
@@ -28,6 +35,7 @@ const EditArticle = ({ history, match, articles, editArticle }) => {
 	
 	return (
 		<Form
+			form={form}
 			name="article_edit"
 			className={classes["edit-form"]}
 			initialValues={{
@@ -88,14 +96,20 @@ const EditArticle = ({ history, match, articles, editArticle }) => {
 
 			<div><EditTags tags={articles[idx].tagList} /></div>
 
-			<Form.Item className={classes["edit-form__button-container"]}>
-				<Button 
-					className={classes["edit-form__button"]}
-					type="primary"
-					htmlType="submit"
-				>
-					Send
-				</Button>
+			<Form.Item shouldUpdate className={classes["edit-form__button-container"]}>
+				{() => (
+					<Button 
+						className={classes["edit-form__button"]}
+						type="primary"
+						htmlType="submit"
+						disabled={
+							!form.isFieldsTouched(false) ||
+							!!form.getFieldsError().filter(({ errors }) => errors.length).length
+						}
+					>
+						Send
+					</Button>
+				)}
 			</Form.Item>
 		</Form>
 	);
