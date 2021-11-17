@@ -17,7 +17,10 @@ import * as actions from '../../redux/actions/actions';
 
 import classes from './profile-page.module.scss';
 
-const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit, user, imgError }) => {
+const ProfilePage = ({ dispatch, history, state }) => {
+	const { errorEditAccount, userEdit, user, imgError } = state;
+	const { editProfile } = bindActionCreators(actions, dispatch);
+
 	useEffect(() => {
 		if (!userEdit) history.push("/profile");
 		else history.push("/");
@@ -31,7 +34,7 @@ const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit, user, i
 	}, []);
 
 	const onFinish = (values) => {
-		onClickEdit(values);
+		editProfile(values);
 	};
 	
 	const onFinishFailed = () => {};
@@ -156,43 +159,29 @@ const ProfilePage = ({ onClickEdit, history, errorEditAccount, userEdit, user, i
 }
 
 ProfilePage.defaultProps = {
-	onClickEdit: () => {},
+	dispatch: () => {},
 	history: {},
-	errorEditAccount: false,
-	userEdit: false,
-	user: {},
-	imgError: false
+	state: {}
 }
 
 ProfilePage.propTypes = {
-	onClickEdit: PropTypes.func,
+	dispatch: PropTypes.func,
 	history: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
 		PropTypes.object,
 		PropTypes.func
 	]),
-	errorEditAccount: PropTypes.bool,
-	userEdit: PropTypes.bool,
-	user: PropTypes.objectOf(PropTypes.string),
-	imgError: PropTypes.bool
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	])
 }
 
-const mapStateToProps = (state) => {
-	const { errorEditAccount, userEdit, user, imgError } = state;
-	return({
-		errorEditAccount,
-		userEdit,
-		user,
-		imgError
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { editProfile } = bindActionCreators(actions, dispatch);
-	return ({
-		onClickEdit: editProfile
-	})
-}
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProfilePage));

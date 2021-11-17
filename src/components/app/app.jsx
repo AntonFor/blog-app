@@ -21,14 +21,17 @@ import CreateArticle from '../create-article';
 import EditArticle from '../edit-article';
 import Spiner from '../spiner';
 
-const App = ({ updateArticles, article, logIn, user, currentPage, loading }) => {
+const App = ({ dispatch, state }) => {
+	const { article, user, currentPage, loading } = state;
+	const { getArticles, logIn } = bindActionCreators(actions, dispatch);
+	
 	useEffect(() => {
-		updateArticles();
+		getArticles();
 	}, [article, user, currentPage]);
 
 	useEffect(() => {
-		const isLogIn = sessionStorage.getItem('isLogIn');
-		const getIsLogIn = JSON.parse(isLogIn);
+		const isLogInStorage = sessionStorage.getItem('isLogIn');
+		const getIsLogIn = JSON.parse(isLogInStorage);
 		if (getIsLogIn) {
 			const getUser = sessionStorage.getItem('user');
 			const getUserPars = JSON.parse(getUser);
@@ -57,47 +60,22 @@ const App = ({ updateArticles, article, logIn, user, currentPage, loading }) => 
 }
 
 App.defaultProps = {
-	updateArticles: () => {},
-	article: {},
-	logIn: () => {},
-	user: {},
-	currentPage: 0,
-	loading: false
+	dispatch: () => {},
+	state: {}
 }
 
 App.propTypes = {
-	updateArticles: PropTypes.func,
-	article: PropTypes.oneOfType([
-		PropTypes.string,
+	dispatch: PropTypes.func,
+	state: PropTypes.oneOfType([
 		PropTypes.number,
 		PropTypes.object,
-		PropTypes.arrayOf(PropTypes.string),
-		PropTypes.arrayOf(PropTypes.string),
+		PropTypes.arrayOf(PropTypes.object),
 		PropTypes.bool
-	]),
-	logIn: PropTypes.func,
-	user: PropTypes.objectOf(PropTypes.string),
-	currentPage: PropTypes.number,
-	loading: PropTypes.bool
+	])
 }
 
-const mapStateToProps = (state) => {
-	const { article, errorCreateAccount, user, currentPage, loading } = state;
-	return ({
-		article,
-		errorCreateAccount,
-		user,
-		currentPage,
-		loading
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { getArticles, logIn } = bindActionCreators(actions, dispatch);
-	return ({
-		updateArticles: getArticles,
-		logIn
-	})
-}
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

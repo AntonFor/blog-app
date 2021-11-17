@@ -19,8 +19,13 @@ import classes from './article-markdown.module.scss';
 
 const { confirm } = Modal;
 
-const ArticleMarkdown = ({ match, articles, user, history, deleteArticle, favorites }) => {
+const ArticleMarkdown = ({ dispatch, state, match, history }) => {
+	const { articles, user } = state;
+	const { deleteArticle, favorites } = bindActionCreators(actions, dispatch);
+	
 	const [ heartIcon, setHeartIcon ] = useState();
+
+	const [ userName, setUserName ] = useState();
 	
 	const { params } = match;
 	const { slug } = params;
@@ -37,7 +42,12 @@ const ArticleMarkdown = ({ match, articles, user, history, deleteArticle, favori
 		else setHeartIcon(<HeartOutlined onClick={() => favorites(articles[idx].favorited, slug)} />);
 	}, [articles]);
 
-	const buttonGroup = (user.username === articles[idx].author.username) ? <ButtonGroup slug={slug} history={history} deleteArticle={deleteArticle} /> : null;
+	useEffect(() => {
+		if (user === null) setUserName('')
+		else setUserName(user.username)
+	}, [user])
+	
+	const buttonGroup = (userName === articles[idx].author.username) ? <ButtonGroup slug={slug} history={history} deleteArticle={deleteArticle} /> : null;
 
 	return(
 		<div className={classes.container}>
@@ -74,47 +84,36 @@ const ArticleMarkdown = ({ match, articles, user, history, deleteArticle, favori
 }
 
 ArticleMarkdown.defaultProps = {
-	articles: [],
 	match: {},
-	user: {},
 	history: {},
-	deleteArticle: () => {},
-	favorites: () => {}
+	dispatch: () => {},
+	state: {}
 }
 
 ArticleMarkdown.propTypes = {
-	articles: PropTypes.arrayOf(PropTypes.object),
 	match: PropTypes.oneOfType([
 		PropTypes.bool,
 		PropTypes.object,
 		PropTypes.string
 	]),
-	user: PropTypes.objectOf(PropTypes.string),
 	history: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
 		PropTypes.object,
 		PropTypes.func
 	]),
-	deleteArticle: PropTypes.func,
-	favorites: PropTypes.func
+	dispatch: PropTypes.func,
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	])
 }
 
-const mapStateToProps = (state) => {
-	const { articles, user } = state;
-	return ({
-		articles,
-		user
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { deleteArticle, favorites } = bindActionCreators(actions, dispatch);
-	return ({
-		deleteArticle,
-		favorites
-	})
-}
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ArticleMarkdown));
 

@@ -13,7 +13,9 @@ import Tags from '../tags';
 
 import classes from './create-article.module.scss';
 
-const CreateArticle = ({ createArticle, history }) => {
+const CreateArticle = ({ dispatch, history }) => {
+	const { createArticle } = bindActionCreators(actions, dispatch);
+
 	const [form] = Form.useForm();
 	const [, forceUpdate] = useState({});
 
@@ -106,12 +108,12 @@ const CreateArticle = ({ createArticle, history }) => {
 }
 
 CreateArticle.defaultProps = {
-	createArticle: () => {},
+	dispatch: () => {},
 	history: {}
 }
 
 CreateArticle.propTypes = {
-	createArticle: PropTypes.func,
+	dispatch: PropTypes.func,
 	history: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
@@ -120,13 +122,6 @@ CreateArticle.propTypes = {
 	])
 }
 
-const mapStateToProps = () => ({})
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
-const mapDispatchToProps = (dispatch) => {
-	const { createArticle } = bindActionCreators(actions, dispatch);
-	return ({
-		createArticle
-	})
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateArticle));
+export default connect(null, mapDispatchToProps)(withRouter(CreateArticle));

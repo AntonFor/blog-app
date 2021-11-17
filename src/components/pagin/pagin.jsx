@@ -10,7 +10,10 @@ import * as actions from '../../redux/actions/actions';
 
 import classes from './pagin.module.scss';
 
-const Pagin = ({ articlesCount, currentPage, changePage, loading }) => {
+const Pagin = ({ state, dispatch }) => {
+	const { articlesCount, currentPage, loading } = state;
+	const { changePage } = bindActionCreators(actions, dispatch);
+
 	const hide = !!loading;
 	return (
 		<Pagination
@@ -27,33 +30,22 @@ const Pagin = ({ articlesCount, currentPage, changePage, loading }) => {
 }
 
 Pagin.defaultProps = {
-	articlesCount: 0,
-	currentPage: 1,
-	changePage: () => {},
-	loading: true
+	state: {},
+	dispatch: () => {}
 }
 
 Pagin.propTypes = {
-	articlesCount: PropTypes.number,
-	currentPage: PropTypes.number,
-	changePage: PropTypes.func,
-	loading: PropTypes.bool
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	]),
+	dispatch: PropTypes.func
 }
 
-const mapStateToProps = (state) => {
-	const { articlesCount, currentPage, loading } = state;
-	return ({
-		articlesCount,
-		currentPage,
-		loading
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { changePage } = bindActionCreators(actions, dispatch);
-	return ({
-		changePage
-	})
-}
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pagin);

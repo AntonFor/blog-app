@@ -15,7 +15,10 @@ import * as actions from '../../redux/actions/actions';
 import classes from './create-page.module.scss';
 import './create-page.css';
 
-const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
+const CreatePage = ({ dispatch, history, state }) => {
+	const { errorCreateAccount, user } = state;
+	const { createAccount } = bindActionCreators(actions, dispatch);
+	
 	useEffect(() => {
 		if (user === null) history.push("/sign-up");
 		else history.push("/");
@@ -29,7 +32,7 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 	}, []);
 	
 	const onFinish = (values) => {
-		onClickCreate(values);
+		createAccount(values);
 	};
 	
 	const onFinishFailed = () => {};
@@ -171,37 +174,29 @@ const CreatePage = ({ onClickCreate, history, errorCreateAccount, user }) => {
 }
 
 CreatePage.defaultProps = {
-	onClickCreate: () => {},
+	dispatch: () => {},
 	history: {},
-	errorCreateAccount: false,
-	user: {}
+	state: {}
 }
 
 CreatePage.propTypes = {
-	onClickCreate: PropTypes.func,
+	dispatch: PropTypes.func,
 	history: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
 		PropTypes.object,
 		PropTypes.func
 	]),
-	errorCreateAccount: PropTypes.bool,
-	user: PropTypes.objectOf(PropTypes.string)
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	])
 }
 
-const mapStateToProps = (state) => {
-	const { errorCreateAccount, user } = state;
-	return ({
-		errorCreateAccount,
-		user
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { createAccount } = bindActionCreators(actions, dispatch);
-	return ({
-		onClickCreate: createAccount
-	})
-}
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreatePage));

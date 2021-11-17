@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-cycle */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
@@ -9,13 +10,16 @@ import * as actions from '../../redux/actions/actions';
 
 import classes from './header.module.scss';
 
-const Header = ({ isLogIn, user, logOut, resetUserEdit, imgIsError, history }) => {
+const Header = ({ state, dispatch, history }) => {
+	const { isLogIn, user } = state;
+	const { logOut, resetUserEdit, imgIsError } = bindActionCreators(actions, dispatch);
+	
 	const [header, setHeader] = useState(<HeaderIsNotLogIn />);
 	
 	useEffect(() => {
 		if (isLogIn) setHeader(<HeaderIsLogIn user={user} onClickLogOut={logOut} resetUserEdit={resetUserEdit} imgIsError={imgIsError} history={history} />)
 		else setHeader(<HeaderIsNotLogIn />)
-	}, [isLogIn, user, logOut, resetUserEdit, imgIsError, history]);
+	}, [isLogIn, user]);
 
 	return (
 		<div>
@@ -52,7 +56,7 @@ const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit, imgIsError, history
 		history.push("/profile");
 	}
 
-	resetUserEdit();
+	useEffect(() =>resetUserEdit(), []);
 
 	return (
 		<div className={classes.header}>
@@ -82,20 +86,19 @@ const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit, imgIsError, history
 };
 
 Header.defaultProps = {
-	isLogIn: false,
-	user: {},
-	logOut: () => {},
-	resetUserEdit: () => {},
-	imgIsError: () => {},
+	state: {},
+	dispatch: () => {},
 	history: {}
 }
 
 Header.propTypes = {
-	isLogIn: PropTypes.bool,
-	user: PropTypes.objectOf(PropTypes.string),
-	logOut: PropTypes.func,
-	resetUserEdit: PropTypes.func,
-	imgIsError: PropTypes.func,
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	]),
+	dispatch: PropTypes.func,
 	history: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
@@ -128,21 +131,8 @@ HeaderIsLogIn.propTypes = {
 	])
 }
 
-const mapStateToProps = (state) => {
-	const { isLogIn, user } = state;
-	return ({
-		isLogIn,
-		user
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { logOut, resetUserEdit, imgIsError } = bindActionCreators(actions, dispatch);
-	return ({
-		logOut,
-		resetUserEdit,
-		imgIsError
-	})
-}
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

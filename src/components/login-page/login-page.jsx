@@ -14,7 +14,10 @@ import * as actions from '../../redux/actions/actions';
 
 import classes from './login-page.module.scss';
 
-const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
+const LoginPage = ({ dispatch, history, state }) => {
+	const { errorLogIn, logIn } = state;
+	const { logIn: onClickLogIn } = bindActionCreators(actions, dispatch);
+
 	useEffect(() => {
 		if (!logIn) history.push("/sign-in");
 		else history.push("/");
@@ -102,37 +105,29 @@ const LoginPage = ({ onClickLogIn, history, errorLogIn, logIn }) => {
 }
 
 LoginPage.defaultProps = {
-	onClickLogIn: () => {},
+	dispatch: () => {},
 	history: {},
-	errorLogIn: false,
-	logIn: false
+	state: {}
 }
 
 LoginPage.propTypes = {
-	onClickLogIn: PropTypes.func,
+	dispatch: PropTypes.func,
 	history: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.number,
 		PropTypes.object,
 		PropTypes.func
 	]),
-	errorLogIn: PropTypes.bool,
-	logIn: PropTypes.bool
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	])
 }
 
-const mapStateToProps = (state) => {
-	const { errorLogIn, logIn } = state;
-	return({
-		errorLogIn,
-		logIn
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { logIn } = bindActionCreators(actions, dispatch);
-	return ({
-		onClickLogIn: logIn
-	})
-}
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginPage));

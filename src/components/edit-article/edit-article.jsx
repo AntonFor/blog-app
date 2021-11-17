@@ -14,7 +14,10 @@ import EditTags from '../edit-tags';
 
 import classes from './edit-article.module.scss';
 
-const EditArticle = ({ history, match, articles, editArticle }) => {
+const EditArticle = ({ history, match, state, dispatch }) => {
+	const { articles } = state;
+	const { editArticle } = bindActionCreators(actions, dispatch);
+	
 	const { params } = match;
 	const { slug } = params;
 	const idx = articles.findIndex((el) => el.slug === slug);
@@ -118,8 +121,8 @@ const EditArticle = ({ history, match, articles, editArticle }) => {
 EditArticle.defaultProps = {
 	history: {},
 	match: {},
-	articles: [],
-	editArticle: () => {}
+	state: {},
+	dispatch: () => {}
 }
 
 EditArticle.propTypes = {
@@ -134,23 +137,17 @@ EditArticle.propTypes = {
 		PropTypes.object,
 		PropTypes.string
 	]),
-	articles: PropTypes.arrayOf(PropTypes.object),
-	editArticle: PropTypes.func
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	]),
+	dispatch: PropTypes.func
 }
 
-const mapStateToProps = (state) => {
-	const { articles } = state;
-	return ({
-		articles
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = (dispatch) => {
-	const { editArticle } = bindActionCreators(actions, dispatch);
-	return ({
-		editArticle
-	})
-}
-
+const mapDispatchToProps = (dispatch) => ({ dispatch });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditArticle));

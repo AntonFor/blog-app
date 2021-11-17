@@ -10,7 +10,9 @@ import ArticleItem from '../article-item';
 import Pagin from '../pagin';
 import AlertErr from '../alert';
 
-const ArticleList = ({ articles, error }) => {
+const ArticleList = ({ state }) => {
+	const { articles, error } = state;
+
 	const elements = articles.map((__, i) => (
 		<li key={uuidv4()}><ArticleItem article={articles[i]} /></li>
 	));
@@ -28,23 +30,18 @@ const ArticleList = ({ articles, error }) => {
 }
 
 ArticleList.defaultProps = {
-	articles: [],
-	error: false
+	state: {}
 }
 
 ArticleList.propTypes = {
-	articles: PropTypes.arrayOf(PropTypes.object),
-	error: PropTypes.bool
+	state: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.object,
+		PropTypes.arrayOf(PropTypes.object),
+		PropTypes.bool
+	])
 }
 
-const mapStateToProps = (state) => {
-	const { articles, error } = state;
-	return ({
-		articles,
-		error
-	})
-}
+const mapStateToProps = (state) => ({ state });
 
-const mapDispatchToProps = () => ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleList);
+export default connect(mapStateToProps, )(ArticleList);
