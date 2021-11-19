@@ -56,7 +56,7 @@ const HeaderIsLogIn = ({ user, onClickLogOut, resetUserEdit, imgIsError, history
 		history.push("/profile");
 	}
 
-	useEffect(() =>resetUserEdit(), []);
+	useEffect(() =>resetUserEdit(), [user]);
 
 	return (
 		<div className={classes.header}>
