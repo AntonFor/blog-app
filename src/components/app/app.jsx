@@ -30,10 +30,10 @@ const App = ({ dispatch, state }) => {
 	}, [article, user, currentPage]);
 
 	useEffect(() => {
-		const isLogInStorage = sessionStorage.getItem('isLogIn');
+		const isLogInStorage = localStorage.getItem('isLogIn');
 		const getIsLogIn = JSON.parse(isLogInStorage);
 		if (getIsLogIn) {
-			const getUser = sessionStorage.getItem('user');
+			const getUser = localStorage.getItem('user');
 			const getUserPars = JSON.parse(getUser);
 			logIn(getUserPars);
 		}

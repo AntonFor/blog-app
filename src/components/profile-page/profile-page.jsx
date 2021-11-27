@@ -11,7 +11,7 @@ import { Form, Input, Button } from 'antd';
 
 import AlertErr from '../alert';
 
-import { getPassword } from '../../utilities/utilities';
+import { getPassword, imgCheck } from '../../utilities/utilities';
 
 import * as actions from '../../redux/actions/actions';
 
@@ -19,7 +19,7 @@ import classes from './profile-page.module.scss';
 
 const ProfilePage = ({ dispatch, history, state }) => {
 	const { errorEditAccount, userEdit, user, imgError } = state;
-	const { editProfile } = bindActionCreators(actions, dispatch);
+	const { editProfile, imgIsError } = bindActionCreators(actions, dispatch);
 
 	useEffect(() => {
 		if (!userEdit) history.push("/profile");
@@ -34,7 +34,7 @@ const ProfilePage = ({ dispatch, history, state }) => {
 	}, []);
 
 	const onFinish = (values) => {
-		editProfile(values);
+		imgCheck(values.avatar, editProfile, imgIsError, values);
 	};
 	
 	const onFinishFailed = () => {};

@@ -1,6 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-cycle */
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
@@ -8,9 +11,15 @@ import { HeartOutlined, HeartTwoTone } from '@ant-design/icons';
 
 import { format } from 'date-fns';
 
+import * as actions from '../../redux/actions/actions';
+
 import classes from './article-item.module.scss';
 
-const ArticleItem = ({ article, history }) => {
+const ArticleItem = ({ article, history, dispatch }) => {
+	const { favorites } = bindActionCreators(actions, dispatch);
+
+	const [ heartIcon, setHeartIcon ] = useState();
+
 	const tags = article.tagList.map((item, i) => (
 		<li key={i} className={classes["content__tag-item"]}>{item}</li>
 	));
@@ -20,7 +29,10 @@ const ArticleItem = ({ article, history }) => {
 		history.push(`/articles/${id}`)
 	}
 
-	const heartIcon = article.favorited ? <HeartTwoTone twoToneColor="red" /> : <HeartOutlined />;
+	useEffect(() => {
+		if (article.favorited === true) setHeartIcon(<HeartTwoTone twoToneColor="red" onClick={() => favorites(article.favorited, article.slug)} />);
+		else setHeartIcon(<HeartOutlined onClick={() => favorites(article.favorited, article.slug)} />);
+	}, [article]);
 
 	return (
 		<div className={classes.container}>
@@ -54,7 +66,8 @@ const ArticleItem = ({ article, history }) => {
 
 ArticleItem.defaultProps = {
 	article: {},
-	history: {}
+	history: {},
+	dispatch: () => {}
 }
 
 ArticleItem.propTypes = {
@@ -76,7 +89,10 @@ ArticleItem.propTypes = {
 		PropTypes.number,
 		PropTypes.object,
 		PropTypes.func
-	])
+	]),
+	dispatch: PropTypes.func
 }
 
-export default withRouter(ArticleItem);
+const mapDispatchToProps = (dispatch) => ({ dispatch });
+
+export default connect(null, mapDispatchToProps)(withRouter(ArticleItem));

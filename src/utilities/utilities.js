@@ -15,8 +15,8 @@ export const createAccount = (state, dataAccount, dataUser) => {
 		"email": dataUser.email,
 		"password": dataUser.password
 	};
-	sessionStorage.setItem('user', JSON.stringify(body));
-	sessionStorage.setItem('isLogIn', JSON.stringify(true));
+	localStorage.setItem('user', JSON.stringify(body));
+	localStorage.setItem('isLogIn', JSON.stringify(true));
 	return newState;
 }
 
@@ -27,14 +27,14 @@ export const errorAccount = (state) => {
 
 export const logOut = (state) => {
 	const newState = {...state, isLogIn: false, user: null, logIn: false};
-	sessionStorage.setItem('isLogIn', JSON.stringify(false));
+	localStorage.setItem('isLogIn', JSON.stringify(false));
 	return newState;
 }
 
 export const logIn = (state, dataAccount, dataUser) => {
 	const newState = {...state, errorLogIn: false, isLogIn: true, user: dataAccount.user, logIn: true};
-	sessionStorage.setItem('user', JSON.stringify(dataUser));
-	sessionStorage.setItem('isLogIn', JSON.stringify(true));
+	localStorage.setItem('user', JSON.stringify(dataUser));
+	localStorage.setItem('isLogIn', JSON.stringify(true));
 	return newState;
 }
 
@@ -50,11 +50,11 @@ export const editProfile = (state, dataAccount, dataUser) => {
 	};
 	if (dataUser.password !== undefined) body = {...body, "password": dataUser.password}
 	else {
-		const user = sessionStorage.getItem('user');
+		const user = localStorage.getItem('user');
 		const getUser = JSON.parse(user);
 		body = {...body, "password": getUser.password};
 	}
-	sessionStorage.setItem('user', JSON.stringify(body));
+	localStorage.setItem('user', JSON.stringify(body));
 	return newState;
 }
 
@@ -134,7 +134,14 @@ export const getTags = (value) => {
 }
 
 export const getPassword = () => {
-	const user = sessionStorage.getItem('user');
+	const user = localStorage.getItem('user');
 	const getUser = JSON.parse(user);
 	return getUser.password;
+}
+
+export const imgCheck = (srcImg, callback, callbackErr, arg) => {
+	const img = new Image();
+	img.src = srcImg;
+	img.onload = () => callback(arg);
+	img.onerror = () => callbackErr();
 }
