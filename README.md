@@ -1,4 +1,4 @@
-Ссылка: https://sharp-volhard-3f2674.netlify.app/
+Ссылка: https://quirky-lichterman-a440e7.netlify.app/
 
 # Getting Started with Create React App
 
