@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
@@ -17,11 +17,6 @@ const CreateArticle = ({ dispatch, history }) => {
 	const { createArticle } = bindActionCreators(actions, dispatch);
 
 	const [form] = Form.useForm();
-	const [, forceUpdate] = useState({});
-
-	useEffect(() => {
-		forceUpdate({});
-	}, []);
 	
 	const onFinish = (values) => {
 		createArticle(values);
